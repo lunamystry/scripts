@@ -1,13 +1,13 @@
 #! /usr/bin/env python
 
-""" 
-witsproxy: Sets the Wits proxy for all the files that I have to keep setting it for 
+des = """ 
+witsproxy: Sets the Wits proxy for all the files that I have to keep setting it for \n
 
-author: Leonard Mandla Mbuli <lm.mbuli@gmail.com>
+author: Leonard Mandla Mbuli <lm.mbuli@gmail.com> \n
 
-creation date: 08 July 2011
-last update: 29 July 2011
-python 3
+creation date: 08 July 2011 \n
+last update: 06 September 2012 \n
+python 3\n
 
 """
 
@@ -19,8 +19,8 @@ import fileinput
 
 def main():
     """ The main function"""
-    des = """Sets the Wits proxy for me, how kind don't you think\
-          Needs to be run as root though """
+    # des = """Sets the Wits proxy for me, how kind don't you think.\
+    #       Needs to be run as root though """
     parser = argparse.ArgumentParser(description=des) 
     parser.add_argument('username',
                     help="The new or updated proxy username")
@@ -31,18 +31,18 @@ def main():
     parser.add_argument('-b', '--bash', action='store_true', 
                     help="Set the bash proxy")
     parser.add_argument('-c', '--cntlm', action='store_true', 
-                    help="Use CNTML to set the proxy (MUST ALREADY BE INSTALLED and configured to listern on port 8000)")
+                    help="Use CNTML to set the proxy (MUST ALREADY BE INSTALLED and configured to listen on port 8000)")
     parser.add_argument('-s', '--staff', action='store_true', 
                     help="Change proxy to staff proxy")
     args = parser.parse_args()
     proxystr = "http://"+args.username+":"+args.password
 
-    if(args.staff)
+    if(args.staff):
         proxystr += "@proxyad.wits.ac.za:80/"
-    elif(args.cntlm)
+    elif(args.cntlm == True):
         # TODO: write the configuration file for CNTLM
         proxystr = "127.0.0.1:8000"
-    else
+    else:
         proxystr += "@proxyss.wits.ac.za:80/"
 
     if args.set_all == True or args.bash == True:
