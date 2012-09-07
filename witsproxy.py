@@ -45,9 +45,9 @@ def main():
     else:
         proxystr += "@proxyss.wits.ac.za:80/"
 
-    if args.set_all == True or args.bash == True:
+    if args.bash == True:
         set_bash_proxy(proxystr)
-    if args.set_all == True or args.apt == True:
+    if args.apt == True:
         set_apt_proxy(proxystr)
 
 def set_apt_proxy(proxystr):
