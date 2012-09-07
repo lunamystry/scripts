@@ -1,9 +1,9 @@
 #! /usr/bin/env python
 
 """ 
-setproxy: Sets the Wits proxy for all the files that I have to keep setting it for 
+witsproxy: Sets the Wits proxy for all the files that I have to keep setting it for 
 
-author: Leonard Mandla Mbuli <mandla.mbuli@live.co.za>
+author: Leonard Mandla Mbuli <lm.mbuli@gmail.com>
 
 creation date: 08 July 2011
 last update: 29 July 2011
@@ -23,16 +23,27 @@ def main():
           Needs to be run as root though """
     parser = argparse.ArgumentParser(description=des) 
     parser.add_argument('username',
-                    help="The new or updated proxy")
+                    help="The new or updated proxy username")
     parser.add_argument('password', 
-                    help="The new or updated password")
+                    help="The new or updated proxy password")
     parser.add_argument('-a', '--apt', action='store_true', 
                     help="Set only the apt proxy (Ubuntu or the like)")
     parser.add_argument('-b', '--bash', action='store_true', 
                     help="Set the bash proxy")
+    parser.add_argument('-c', '--cntlm', action='store_true', 
+                    help="Use CNTML to set the proxy (MUST ALREADY BE INSTALLED and configured to listern on port 8000)")
+    parser.add_argument('-s', '--staff', action='store_true', 
+                    help="Change proxy to staff proxy")
     args = parser.parse_args()
-    proxystr = "http://"+args.username+":"+args.password+\
-               "@proxyss.wits.ac.za:80/"
+    proxystr = "http://"+args.username+":"+args.password
+
+    if(args.staff)
+        proxystr += "@proxyad.wits.ac.za:80/"
+    elif(args.cntlm)
+        # TODO: write the configuration file for CNTLM
+        proxystr = "127.0.0.1:8000"
+    else
+        proxystr += "@proxyss.wits.ac.za:80/"
 
     if args.set_all == True or args.bash == True:
         set_bash_proxy(proxystr)
