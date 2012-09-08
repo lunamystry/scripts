@@ -55,15 +55,14 @@ def main():
         set_apt_proxy(proxystr)
 
 def make_proxystr(username,password,cntlm,staff):
-    proxystr = "http://"
     proxyaddress = "proxyss.wits.ac.za:80"
     if(staff):
         proxyaddress = "proxyad.wits.ac.za:80"
-        proxystr += "http://ds\\"+username+":"+password+"@"+proxyaddress
+        proxystr = "http://ds\\"+username+":"+password+"@"+proxyaddress
     elif(cntlm):
         proxystr += "127.0.0.1:8000"
     else:
-        proxystr += "http://students\\"+username+":"+password+"@"
+        proxystr = "http://students\\"+username+":"+password+"@"+proxyaddress
     return proxystr,proxyaddress
 
 def set_apt_proxy(proxystr):
