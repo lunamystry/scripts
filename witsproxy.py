@@ -3,14 +3,14 @@
 descr = """ 
     witsproxy 
     Sets the Wits proxy for all the files that I have to 
-    keep setting it for \n
+    to set the proxy for 
     
-    author: Leonard Mandla Mbuli <lm.mbuli@gmail.com> \n
+    author: Leonard Mandla Mbuli <lm.mbuli@gmail.com>
     
-    creation date: 08 July 2011 \n
-    last update: 06 September 2012 \n
+    creation date: 08 July 2011
+    last update: 8 September 2012
     
-    python 3 \n
+    python 3
 """
 
 import argparse
@@ -31,11 +31,15 @@ def main():
     parser.add_argument('password', 
                     help="The new or updated proxy password")
     parser.add_argument('-a', '--set_apt', action='store_true', 
-                    help="Set only the apt proxy (Ubuntu or the like)")
+                    help="Set the apt proxy (Ubuntu or the like)")
     parser.add_argument('-b', '--set_bash', action='store_true', 
-                    help="Set the bash proxy")
+                    help="Set the proxy in ~/.bashrc")
+    parser.add_argument('-c', '--set_current_shell', action='store_true', 
+                    help="Exports {http,ftp,https}_proxy variables in current shell")
+    parser.add_argument('-z', '--set_zsh', action='store_true', 
+                    help="Set the proxy in ~/.zshrc (TO BE DONE)")
     parser.add_argument('-s', '--set_svn', action='store_true', 
-                    help="To be implemented soon")
+                    help="Set the proxy in ~/.subversion/servers (TO BE DONE)")
     parser.add_argument('-C', '--use_cntlm', action='store_true', 
                     help="Use CNTML to set the proxy (CNTML must installed but not configured)")
     parser.add_argument('-S', '--is_staff', action='store_true', 
