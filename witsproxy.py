@@ -51,6 +51,8 @@ def main():
         set_cntlm_config(args.username,args.password,proxyaddress,args.is_staff);
     if args.set_bash:
         set_bash_proxy(proxystr)
+    if args.set_svn:
+        set_svn_proxy(args.username,args.password,proxyaddress,args.is_staff)
     if args.set_apt:
         set_apt_proxy(proxystr)
 
@@ -174,6 +176,56 @@ def set_bash_proxy(proxystr):
         f.write(ftp_proxy)
         f.close()
         print("Created new '"+bashrc+"' with new proxy settings")
+
+def set_svn_proxy(username,passowrd,proxyaddress,is_staff):
+    """ 
+      Set the proxy in the .subversion/servers file
+
+      - if does then replace them with the new ones
+      - if it does not have the proxy str then append the string with message
+      - if svn_file file does not exist make it and append 
+    """
+    host = proxyaddress[:-3]
+    port = proxyaddress[-2:]
+    domain = "students\\"
+    if (is_staff):
+        domain = "ds\\"
+    print(host,port)
+    svn_file = os.path.join(os.getenv("HOME"), ".subversion/svn_file")
+
+    if os.path.isfile(svn_file):
+        replacements = 0
+        for line in fileinput.input(svn_file, inplace = True):
+            if re.match(r'http-proxy-host = ', line)!= None:
+                replacements = replacements + 1
+                sys.stdout.write("http-proxy-host = "+host)
+            elif re.match(r'http-proxy-port = ', line)!= None:
+                replacements = replacements + 1
+                sys.stdout.write("http-proxy-port = "+port)
+            elif re.match(r'http-proxy-username = ', line)!= None:
+                replacements = replacements + 1
+                sys.stdout.write("http-proxy-username = "+domain+username)
+            elif re.match(r'http-proxy-password = ', line)!= None:
+                replacements = replacements + 1
+                sys.stdout.write("http-proxy-password = "+password)
+            else:
+                sys.stdout.write(line)
+    #     if replacements == 0:
+    #        f = open(svn_file, 'a')
+    #        f.write(http_proxy)
+    #        f.write(https_proxy)
+    #        f.write(ftp_proxy)
+    #        f.close()
+    #        print("Proxy settings not found, thus appended")
+    #     elif replacements == 3:
+    #        print("Proxy settings successfully changed")
+    # else:
+    #     f = open(svn_file, 'w')
+    #     f.write(http_proxy)
+    #     f.write(https_proxy)
+    #     f.write(ftp_proxy)
+    #     f.close()
+    #     print("Created new '"+svn_file+"' with new proxy settings")
 
 if __name__ == '__main__':
     main()
