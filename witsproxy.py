@@ -20,6 +20,81 @@ import sys
 import fileinput
 import textwrap
 
+class ProxyAddress:
+    host
+    port
+    domain
+    def __init__(self,username,password,host,port,is_staff):
+        self.host = address[:-3]
+        self.port = address[-2:]
+        self.domain = "students\\"
+        if (is_staff):
+            self.domain = "ds\\"
+
+class CntlmProxy(ProxyAddress):
+    def set():
+    # def set_cntlm_config(username,password,address,is_staff):
+        """ 
+            Set the proxy details in the cntlm config 
+        """
+        domain = "students"
+        if(is_staff):
+            domain = "ds"
+        no_proxy="*wits.ac.za,*mirror.ac.za"
+        config_file = "/etc/cntlm.conf"
+
+        if os.path.isfile(config_file):
+            replacements = 0
+            for line in fileinput.input(config_file, inplace = True):
+                if re.match(r'Username', line)!= None:
+                    replacements = replacements + 1
+                    sys.stdout.write('{0:11} {1}\n'.format("Username",username))
+                elif re.match(r'Domain', line)!= None:
+                    sys.stdout.write('{0:11} {1}\n'.format("Domain",domain))
+                    replacements = replacements + 1
+                elif re.match(r'Password', line)!= None:
+                    sys.stdout.write('{0:11} {1}\n'.format("Password",password))
+                    replacements = replacements + 1
+                elif re.match(r'Proxy', line)!= None:
+                    sys.stdout.write('{0:11} {1}\n'.format("Proxy",address))
+                    replacements = replacements + 1
+                elif re.match(r'NoProxy', line)!= None:
+                    line = line.rstrip("\n")
+                    sys.stdout.write(line+","+no_proxy+"\n")
+                    replacements = replacements + 1
+                elif re.match(r'Listen', line)!= None:
+                    sys.stdout.write('{0:11} {1}\n'.format("Listen","8000"))
+                    replacements = replacements + 1
+                else:
+                    sys.stdout.write(line)
+            if replacements == 0:
+               f = open(config_file, 'a')
+               details = {"Username":username,"Domain":domain,"Password":password,"Proxy":address,"Listen":"8000"}
+               for detail,value in details.items():
+                   f.write('{0:11} {1}\n'.format(detail,value))
+               f.close()
+               print("Proxy settings not found, thus appended")
+            elif replacements == 5:
+               print("Proxy settings successfully changed")
+        else:
+            f = open(config_file, 'w')
+            details = {"Username":username,"Domain":domain,"Password":password,"Proxy":address,"Listen":"8000"}
+            for detail,value in details.items():
+                f.write('{0:11} {1}\n'.format(detail,value))
+            f.close()
+            print("Created new '"+config_file+"' with new proxy settings")
+
+    def make_proxystr(username,password,cntlm,staff):
+        proxyaddress = "proxyss.wits.ac.za:80"
+        if(staff):
+            proxyaddress = "proxyad.wits.ac.za:80"
+            proxystr = "http://ds\\"+username+":"+password+"@"+proxyaddress
+        elif(cntlm):
+            proxystr += "127.0.0.1:8000"
+        else:
+            proxystr = "http://students\\"+username+":"+password+"@"+proxyaddress
+        return proxystr,proxyaddress
+
 def main():
     """ The main function"""
     parser = argparse.ArgumentParser(
@@ -82,57 +157,6 @@ def set_apt_proxy(proxystr):
     f.write(ftp_proxy)
     f.close()
 
-def set_cntlm_config(username,password,address,is_staff):
-    """ 
-        Set the proxy details in the cntlm config 
-    """
-    domain = "students"
-    if(is_staff):
-        domain = "ds"
-    no_proxy="*wits.ac.za,*mirror.ac.za"
-    config_file = "/etc/cntlm.conf"
-
-    if os.path.isfile(config_file):
-        replacements = 0
-        for line in fileinput.input(config_file, inplace = True):
-            if re.match(r'Username', line)!= None:
-                replacements = replacements + 1
-                sys.stdout.write('{0:11} {1}\n'.format("Username",username))
-            elif re.match(r'Domain', line)!= None:
-                sys.stdout.write('{0:11} {1}\n'.format("Domain",domain))
-                replacements = replacements + 1
-            elif re.match(r'Password', line)!= None:
-                sys.stdout.write('{0:11} {1}\n'.format("Password",password))
-                replacements = replacements + 1
-            elif re.match(r'Proxy', line)!= None:
-                sys.stdout.write('{0:11} {1}\n'.format("Proxy",address))
-                replacements = replacements + 1
-            elif re.match(r'NoProxy', line)!= None:
-                line = line.rstrip("\n")
-                sys.stdout.write(line+","+no_proxy+"\n")
-                replacements = replacements + 1
-            elif re.match(r'Listen', line)!= None:
-                sys.stdout.write('{0:11} {1}\n'.format("Listen","8000"))
-                replacements = replacements + 1
-            else:
-                sys.stdout.write(line)
-        if replacements == 0:
-           f = open(config_file, 'a')
-           details = {"Username":username,"Domain":domain,"Password":password,"Proxy":address,"Listen":"8000"}
-           for detail,value in details.items():
-               f.write('{0:11} {1}\n'.format(detail,value))
-           f.close()
-           print("Proxy settings not found, thus appended")
-        elif replacements == 5:
-           print("Proxy settings successfully changed")
-    else:
-        f = open(config_file, 'w')
-        details = {"Username":username,"Domain":domain,"Password":password,"Proxy":address,"Listen":"8000"}
-        for detail,value in details.items():
-            f.write('{0:11} {1}\n'.format(detail,value))
-        f.close()
-        print("Created new '"+config_file+"' with new proxy settings")
-
 def set_bash_proxy(proxystr):
     """ 
       Set the proxy in the .bashrc file
@@ -177,13 +201,13 @@ def set_bash_proxy(proxystr):
         f.close()
         print("Created new '"+bashrc+"' with new proxy settings")
 
-def set_svn_proxy(username,passowrd,proxyaddress,is_staff):
+def set_svn_proxy(username,password,proxyaddress,is_staff):
     """ 
       Set the proxy in the .subversion/servers file
 
       - if does then replace them with the new ones
       - if it does not have the proxy str then append the string with message
-      - if svn_file file does not exist make it and append 
+      - if servers file does not exist make it and append 
     """
     host = proxyaddress[:-3]
     port = proxyaddress[-2:]
@@ -219,7 +243,8 @@ def set_svn_proxy(username,passowrd,proxyaddress,is_staff):
     #        print("Proxy settings not found, thus appended")
     #     elif replacements == 3:
     #        print("Proxy settings successfully changed")
-    # else:
+    else:
+        print "Something wrong with the file! does it exist?"
     #     f = open(svn_file, 'w')
     #     f.write(http_proxy)
     #     f.write(https_proxy)
