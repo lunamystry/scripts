@@ -15,7 +15,7 @@ import lxml.html
 import urllib.request, urllib.error, urllib.parse
 
 url = "http://dept.ee.wits.ac.za/~cheng/ELEN3015/Program/"
-save_path = "/home/leny/University/Data_and_Information/Labs/MandlaMbuli_0705871Y_LAB4/src/mfiles"
+save_path = "/home/leny/University/Data_and_Information/Labs/MandlaMbuli_0705871Y_LAB4/src/mfiles/"
 
 # fetch the page
 res = urllib.request.urlopen(url)
@@ -36,4 +36,4 @@ for node in tree.xpath('//a[re:test(@href, "\.m$", "i")]', namespaces=ns):
     local_file = open(save_path + filename, 'wb') # binary open file
     local_file.write(remote_file.read())
     local_file.close()
-    print("Saved file: " + filename)
+    print("Saved file: " + save_path + filename)
