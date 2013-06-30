@@ -1,7 +1,6 @@
 #! /usr/bin/env python
-
-descr = """ 
-    searchreplace 
+descr = """
+    searchreplace
 
     author: Leonard Mandla Mbuli <lm.mbuli@gmail.com>
 
@@ -23,7 +22,7 @@ def main():
     parser = argparse.ArgumentParser(
                 formatter_class=argparse.RawDescriptionHelpFormatter,
                 description=textwrap.dedent(descr)
-            ) 
+            )
     parser.add_argument('searchterm',
                     help="The term to search for")
     parser.add_argument('replaceterm',
@@ -51,7 +50,7 @@ def find_filenames(directory,extension,is_recursive):
     "searches either the provided directory for filenames "
     paths = glob.glob(directory+"/*")
     filenames = []
-    for path in paths: 
+    for path in paths:
         if os.path.isdir(path) and is_recursive:
             filenames += find_filenames(path,extension,is_recursive)
         else:
@@ -72,7 +71,7 @@ def search_replace(searchterm,replaceterm,filename):
                 sys.stdout.write(line)
             else:
                 sys.stdout.write(line)
-    print("IN: "+filename)
+        print("IN: "+filename)
 
 if __name__ == '__main__':
     main()
