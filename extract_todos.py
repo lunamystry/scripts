@@ -64,7 +64,7 @@ def find_filenames(directory, extension, is_recursive):
                      if os.path.splitext(filename)[1] == "."+extension]
 
     if filenames:
-        logging.info("found: "+str('\t\n'.join(filenames)))
+        logging.info("found: "+str(' '.join(filenames)))
         return filenames
     else:
         logging.info(":-( No files found in "+directory)
@@ -77,9 +77,9 @@ def search_replace(filename, outputfile="todos.out"):
         file = open(filename, 'r')
         out_file = open(outputfile, 'a')
         for line_num, line in enumerate(file.readlines()):
-            if re.match(r'TODO', line) is not None:
+            if re.search(r'TODO', line):
                 num_found = num_found + 1
-                out_file.write("Filename:"+filename+" line: "+str(line_num + 1)+"\n")
+                out_file.write(filename+" line: "+str(line_num + 1)+"\n")
                 logging.info("\tFound one :-)")
 
 
