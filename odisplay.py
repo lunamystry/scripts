@@ -33,13 +33,6 @@ def parse_args():
                         type=str,
                         help="[left/right/above/below]" +
                         "which side of the laptop display is on")
-    parser.add_argument('-w',
-                        '--wallpaper',
-                        default="/home/leny/System/" +
-                        "Wallpapers/Mercedes-Benz_s_class_2013.jpg",
-                        nargs='?',
-                        type=str,
-                        help="wallpaper location")
     parser.add_argument('-s',
                         '--size',
                         default='1280x1024',
@@ -50,17 +43,10 @@ def parse_args():
     args = parser.parse_args()
     if(args.mode == 'on'):
         switch_on(args.position, args.size)
-        set_wallpaper(args.wallpaper)
     elif(args.mode == 'off'):
         switch_off()
     else:
         parser.print_help()
-
-
-def set_wallpaper(wallpaper):
-    cmd = "feh --bg-fill" + wallpaper
-    run_command(cmd)
-    logging.info("set wallpaper: " + wallpaper)
 
 
 def switch_on(position, size):
