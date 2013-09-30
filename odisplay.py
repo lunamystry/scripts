@@ -26,13 +26,18 @@ def parse_args():
                         type=str,
                         metavar='mode',
                         help="[on/off] switch monitor on or off")
-    parser.add_argument('-p',
-                        '--position',
-                        default='left',
-                        nargs='?',
-                        type=str,
-                        help="[left/right/above/below]" +
-                        "which side of the laptop display is on")
+    parser.add_argument('--above',
+                        action='store_true',
+                        help="The other display is on the above")
+    parser.add_argument('--below',
+                        action='store_true',
+                        help="The other display is on the below")
+    parser.add_argument('--right',
+                        action='store_true',
+                        help="The other display is on the right")
+    parser.add_argument('--left',
+                        action='store_true',
+                        help="The other display is on the left")
     parser.add_argument('-s',
                         '--size',
                         default='1280x1024',
@@ -42,7 +47,14 @@ def parse_args():
 
     args = parser.parse_args()
     if(args.mode == 'on'):
-        switch_on(args.position, args.size)
+        if args.below:
+           switch_on('below', args.size)
+        elif args.left:
+           switch_on('left', args.size)
+        elif args.above:
+           switch_on('above', args.size)
+        else:
+           switch_on('right', args.size)
     elif(args.mode == 'off'):
         switch_off()
     else:
