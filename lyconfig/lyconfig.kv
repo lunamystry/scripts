@@ -1,0 +1,66 @@
+#: kivy 1.7.1
+MainView:
+
+<MainView>:
+    anchor_y: "center"
+    BoxLayout:
+        orientation: "vertical"
+
+        BoxLayout:
+            size_hint: .2, .05
+            pos_hint: {"center_x": .5}
+            Button:
+                text: "Open"
+            Button:
+                text: "New"
+            Button:
+                text: "Export"
+
+        BoxLayout:
+            ListView:
+                item_strings: [str(i) for i in range(100)]
+
+            BoxLayout:
+                size_hint: .6, 1
+                orientation: "vertical"
+                BoxLayout:
+                    size_hint: 1, .3
+                    TextInput:
+                        size_hint: .6, 1
+                        text: "name"
+                    TextInput:
+                        size_hint: .2, 1
+                        text: "warning"
+                TextInput:
+                    text: "description"
+                BoxLayout:
+                    size_hint: 1, .3
+                    TextInput:
+                        text: "Step"
+                    Button:
+                        size_hint: .2, 1
+                        text: "Add"
+                ListView:
+                BoxLayout:
+                    size_hint: 1, .3
+                    TextInput:
+                        text: "Expected result"
+                    Button:
+                        size_hint: .2, 1
+                        text: "Add"
+                ListView:
+                BoxLayout:
+                    size_hint: 1, .3
+                    TextInput:
+                        size_hint: .3, 1
+                        text: "type"
+                    TextInput:
+                        text: "Alert"
+                    Button:
+                        size_hint: .3, 1
+                        text: "Add"
+                ListView:
+                    height: "25dp"
+                Button:
+                    size_hint: 1, .3
+                    text: "Save"
