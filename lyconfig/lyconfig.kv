@@ -1,5 +1,10 @@
 #: kivy 1.7.2
+#:import la kivy.adapters.listadapter.ListAdapter
+#:import lbl kivy.uix.label
+#:import os os
+
 MainView:
+
 
 <MainView>:
     anchor_y: "center"
@@ -37,7 +42,7 @@ MainView:
                         text: "browse"
                         size_hint: 0.2, 1
                 ListView:
-                    item_strings: [str(i) for i in range(100)]
+                    item_strings: os.listdir("/home/leny/System/Wallpapers")
 
             BoxLayout:
                 orientation: "vertical"
