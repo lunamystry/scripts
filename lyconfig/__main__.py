@@ -4,6 +4,7 @@ kivy.require('1.7.2')
 from kivy.app import App
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.stacklayout import StackLayout
 from kivy.uix.listview import ListItemButton
 from kivy.properties import ObjectProperty
 from kivy.properties import StringProperty
@@ -13,19 +14,17 @@ import os
 class FileListItem(BoxLayout, ListItemButton):
     filename = StringProperty()
 
-class FileList(BoxLayout):
+class FileList(StackLayout):
+    wallpaper_dir = StringProperty()
     list_view = ObjectProperty()
 
-    def __init__(self, **kwargs):
-        super(FileList, self).__init__()
-        self.list_view.adapter.data = os.listdir("/home/leny/System/Wallpapers")
-
-    def args_converter(self, index, id):
-        return {}
+    def update(self, dir):
+        if os.path.isdir(dir):
+            self.list_view.adapter.data = os.listdir(dir)
 
 
 class MainView(AnchorLayout):
-    Wallpaper_dir = StringProperty()
+    pass
 
 
 class Lyconfig(App):
