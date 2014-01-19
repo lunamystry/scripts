@@ -1,13 +1,34 @@
 #: kivy 1.7.2
-#:import la kivy.adapters.listadapter.ListAdapter
+#:import sla kivy.adapters.simplelistadapter
 #:import lbl kivy.uix.label
+#:import ok __main__
 #:import os os
 
 MainView:
 
 
+<FileListItem>:
+    size_hint: 1, None
+    height: "30dp"
+    Label:
+        text: root.filename
+
+
+<FileList>:
+    orientation: "vertical"
+    list_view: dir_list
+    ListView:
+        id: dir_list
+        adapter:
+            sla.SimpleListAdapter(data=[],
+            cls=ok.FileListItem,
+            selection_mode="single",
+            allow_empty_selection=False)
+
+
 <MainView>:
     anchor_y: "center"
+    wallpaper_dir: wallpaper_dir
 
     BoxLayout:
         orientation: "vertical"
@@ -37,12 +58,13 @@ MainView:
                     height: "30dp"
                     spacing: 0
                     TextInput:
+                        id: wallpaper_dir
                         hint_text: "wallpaper directory..."
+                        text: "/home/leny/System/Wallpapers"
                     Button:
                         text: "browse"
                         size_hint: 0.2, 1
-                ListView:
-                    item_strings: os.listdir("/home/leny/System/Wallpapers")
+                FileList:
 
             BoxLayout:
                 orientation: "vertical"
@@ -75,5 +97,4 @@ MainView:
         Label:
             size_hint: 1, None
             height: "25dp"
-            text: "Status"
-            color: [0,0,0,1]
+            text: wallpaper_dir.text
