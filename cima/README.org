@@ -1,0 +1,12 @@
+* cima
+A game written with pygame which I am planning to use
+to switch of my computer. Cima means turn off in isiZulu.
+
+** Design
+
+None
+
+** Why
+
+I wanna teach some game progamming to the [[http://impact.jcse.org][ImpaCTlings]]
+and I never got to finish my software II
