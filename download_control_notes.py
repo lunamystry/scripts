@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO,
 src_url = "http://dept.ee.wits.ac.za/~nyandoro/ControlI/"
 save_path = "/home/leny/University/Control_1/lecture_slides/"
 
-for lecture_num in range(1,10):
+for lecture_num in range(10,25):
     filename = "Control%20I%20-%20Lecture%20" + str(lecture_num) + ".pdf"
     notes_url = src_url + filename
     logging.info("url: " + notes_url)
