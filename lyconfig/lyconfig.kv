@@ -1,4 +1,4 @@
-#: kivy 1.7.2
+#: kivy 1.8.0
 #:import la kivy.adapters.listadapter.ListAdapter
 #:import lbl kivy.uix.label
 #:import ok __main__
@@ -17,7 +17,6 @@ MainView:
     list_view: file_list
     ListView:
         id: file_list
-        adapater: la.ListAdapter(data=[], cls=FileListItem)
 
 
 <MainView>:
@@ -60,7 +59,6 @@ MainView:
                         on_press: file_list.update(wallpaper_dir_input.text)
                 FileList:
                     id: file_list
-                    wallpaper_dir: wallpaper_dir_input.text
 
             BoxLayout:
                 orientation: "vertical"
