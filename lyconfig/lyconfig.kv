@@ -51,8 +51,10 @@ MainView:
                     spacing: 0
                     TextInput:
                         id: wallpaper_dir_input
+                        on_text: file_list.update(wallpaper_dir_input.text)
+                        multiline: False
                         hint_text: "wallpaper directory..."
-                        text: "/home/leny/System/Wallpapers"
+                        text: "/home/leny/Images/wallpapers"
                     Button:
                         text: "open"
                         size_hint: 0.2, 1
