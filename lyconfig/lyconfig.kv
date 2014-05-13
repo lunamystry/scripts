@@ -52,6 +52,7 @@ MainView:
                     TextInput:
                         id: wallpaper_dir_input
                         on_text: file_list.update(wallpaper_dir_input.text)
+                        on_text_validate: file_list.update(wallpaper_dir_input.text)
                         multiline: False
                         hint_text: "wallpaper directory..."
                         text: "/home/leny/Images/wallpapers"
