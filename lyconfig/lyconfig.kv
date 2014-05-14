@@ -27,70 +27,42 @@ MainView:
             size_hint: 1, None
             pos_hint: {"center_x": .5}
             height: "30dp"
-            Label:
-                text: "Options"
-            Button:
-                text: "Center"
-            Button:
-                text: "Fill"
-            Button:
-                text: "Max"
-            Button:
-                text: "Scale"
-            Button:
-                text: "Tile"
+            spacing: 0
+            TextInput:
+                id: wallpaper_dir_input
+                on_text: file_list.update(wallpaper_dir_input.text)
+                on_text_validate: file_list.update(wallpaper_dir_input.text)
+                multiline: False
+                hint_text: "wallpaper directory..."
+                text: "/home/leny/Images/wallpapers"
 
         BoxLayout:
             BoxLayout:
                 orientation: "vertical"
-                size_hint: 0.4, 1
-                BoxLayout:
-                    size_hint: 1, None
-                    pos_hint: {"center_x": .5}
-                    height: "30dp"
-                    spacing: 0
-                    TextInput:
-                        id: wallpaper_dir_input
-                        on_text: file_list.update(wallpaper_dir_input.text)
-                        on_text_validate: file_list.update(wallpaper_dir_input.text)
-                        multiline: False
-                        hint_text: "wallpaper directory..."
-                        text: "/home/leny/Images/wallpapers"
-                    Button:
-                        text: "open"
-                        size_hint: 0.2, 1
-                        on_press: file_list.update(wallpaper_dir_input.text)
-                FileList:
-                    id: file_list
+                pos_hint: {"center_x": .5}
+                size_hint: 0.05, 1
+                Button:
+                    text: "Center"
+                    size_hint: 0.6, 0.5
+                Button:
+                    text: "Fill"
+                    size_hint: 0.6, 0.5
+                Button:
+                    text: "Max"
+                    size_hint: 0.6, 0.5
+                Button:
+                    text: "Scale"
+                    size_hint: 0.6, 0.5
+                Button:
+                    text: "Tile"
+                    size_hint: 0.6, 0.5
 
             BoxLayout:
                 orientation: "vertical"
-                size_hint: 0.6, 1
-                BoxLayout:
-                    orientation: "vertical"
-                    Label:
-                        text: "Preview"
-                        size_hint: 0.2, 0.1
-                    Button:
-                        canvas:
-                            Rectangle:
-                                size: self.size
-                                pos: self.pos
-                                source: 'images/background.jpg'
-                    Button:
-                        text: "Set"
-                        size_hint: 0.2, 0.1
-                BoxLayout:
-                    orientation: "vertical"
-                    Label:
-                        text: "Current"
-                        size_hint: 0.2, 0.1
-                    Button:
-                        canvas:
-                            Rectangle:
-                                size: self.size
-                                pos: self.pos
-                                source: 'images/background.jpg'
+                size_hint: 0.4, 1
+                FileList:
+                    id: file_list
+
         Label:
             size_hint: 1, None
             height: "25dp"
