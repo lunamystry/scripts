@@ -8,6 +8,7 @@ from kivy.uix.stacklayout import StackLayout
 from kivy.uix.listview import ListItemButton
 from kivy.properties import ObjectProperty
 from kivy.properties import StringProperty
+from kivy.properties import ListProperty
 from kivy.adapters.listadapter import ListAdapter
 from kivy.uix.label import Label
 import os
@@ -18,9 +19,19 @@ class FileListItem(BoxLayout, ListItemButton):
 
 
 class FileList(StackLayout):
-    def update(self, dir):
-        if os.path.isdir(dir):
-            self.list_view.adapter.data = os.listdir(dir)
+    directory = StringProperty()
+    file_list = ObjectProperty()
+    files = ListProperty()
+
+    def filename_converter(self, index, filename):
+        result = {
+            "filename": filename,
+        }
+        return result
+
+    def update(self):
+        if os.path.isdir(self.directory):
+            self.files = os.listdir(self.directory)
 
 
 class MainView(AnchorLayout):
