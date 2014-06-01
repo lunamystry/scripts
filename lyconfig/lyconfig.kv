@@ -9,9 +9,10 @@ MainView:
 
 <FileListItem>:
     size_hint: 1, None
+    Image:
+        source: os.path.join(root.directory, root.filename)
     Label:
         text: root.filename
-
 
 <FileList>:
     file_list: file_list
