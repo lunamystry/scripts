@@ -9,7 +9,12 @@ MainView:
 
 <FileListItem>:
     size_hint: 1, None
+    selected_color: (0.2, 0.1, 0.2, 1.0)
+    on_release: app.set_wallpaper(os.path.join(root.directory, root.filename)) 
+
     Image:
+        size_hint: None, None
+        height: root.height
         source: os.path.join(root.directory, root.filename)
     Label:
         text: root.filename

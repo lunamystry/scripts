@@ -11,6 +11,7 @@ from kivy.properties import StringProperty
 from kivy.properties import ListProperty
 from kivy.adapters.listadapter import ListAdapter
 from kivy.uix.label import Label
+import subprocess
 import os
 
 
@@ -44,6 +45,15 @@ class Lyconfig(App):
     def build(self):
         main_view = MainView()
         return main_view
+
+    def set_wallpaper(self, filepath):
+        print("Setting: " + filepath)
+        command = "feh --bg-scale " + filepath
+        process = subprocess.Popen(command,
+                                   shell=True,
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+        process.communicate()
 
 
 if __name__ == "__main__":
