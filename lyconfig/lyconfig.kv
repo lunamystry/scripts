@@ -1,5 +1,5 @@
 #: kivy 1.8.0
-#:import la kivy.adapters.listadapter.ListAdapter
+#:import la kivy.adapters.listadapter
 #:import lbl kivy.uix.label
 #:import ok __main__
 #:import os os
@@ -14,9 +14,13 @@ MainView:
 
 
 <FileList>:
-    list_view: file_list
+    file_list: file_list
     ListView:
         id: file_list
+        file: os.listdir("/home/leny")
+        adapter:
+            la.ListAdapter(data=root.files, cls=ok.FileListItem,
+            args_converter=root.filename_converter)
 
 
 <MainView>:
@@ -30,8 +34,8 @@ MainView:
             spacing: 0
             TextInput:
                 id: wallpaper_dir_input
-                on_text: file_list.update(wallpaper_dir_input.text)
-                on_text_validate: file_list.update(wallpaper_dir_input.text)
+                on_text: file_list.update()
+                on_text_validate: file_list.update()
                 multiline: False
                 hint_text: "wallpaper directory..."
                 text: "/home/leny/Images/wallpapers"
@@ -62,6 +66,7 @@ MainView:
                 size_hint: 0.4, 1
                 FileList:
                     id: file_list
+                    directory: wallpaper_dir_input.text
 
         Label:
             size_hint: 1, None
