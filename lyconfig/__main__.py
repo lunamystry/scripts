@@ -9,14 +9,12 @@ from kivy.uix.listview import ListItemButton
 from kivy.properties import ObjectProperty
 from kivy.properties import StringProperty
 from kivy.properties import ListProperty
-from kivy.adapters.listadapter import ListAdapter
-from kivy.uix.label import Label
 import subprocess
 import os
 
 
 class FileListItem(BoxLayout, ListItemButton):
-    directory= StringProperty()
+    directory = StringProperty()
     filename = StringProperty()
 
 
@@ -28,7 +26,7 @@ class FileList(StackLayout):
     def filename_converter(self, index, filename):
         result = {
             "filename": filename,
-            "directory": self.directory 
+            "directory": self.directory
         }
         return result
 
@@ -47,7 +45,6 @@ class Lyconfig(App):
         return main_view
 
     def set_wallpaper(self, filepath):
-        print("Setting: " + filepath)
         command = "feh --bg-scale " + filepath
         process = subprocess.Popen(command,
                                    shell=True,
