@@ -17,7 +17,6 @@ MainView:
     file_list: file_list
     ListView:
         id: file_list
-        file: os.listdir("/home/leny")
         adapter:
             la.ListAdapter(data=root.files, cls=ok.FileListItem,
             args_converter=root.filename_converter)
@@ -43,27 +42,7 @@ MainView:
         BoxLayout:
             BoxLayout:
                 orientation: "vertical"
-                pos_hint: {"center_x": .5}
-                size_hint: 0.05, 1
-                Button:
-                    text: "Center"
-                    size_hint: 0.6, 0.5
-                Button:
-                    text: "Fill"
-                    size_hint: 0.6, 0.5
-                Button:
-                    text: "Max"
-                    size_hint: 0.6, 0.5
-                Button:
-                    text: "Scale"
-                    size_hint: 0.6, 0.5
-                Button:
-                    text: "Tile"
-                    size_hint: 0.6, 0.5
-
-            BoxLayout:
-                orientation: "vertical"
-                size_hint: 0.4, 1
+                size_hint: 0.1, 1
                 FileList:
                     id: file_list
                     directory: wallpaper_dir_input.text
