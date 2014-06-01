@@ -15,6 +15,7 @@ import os
 
 
 class FileListItem(BoxLayout, ListItemButton):
+    directory= StringProperty()
     filename = StringProperty()
 
 
@@ -26,6 +27,7 @@ class FileList(StackLayout):
     def filename_converter(self, index, filename):
         result = {
             "filename": filename,
+            "directory": self.directory 
         }
         return result
 
