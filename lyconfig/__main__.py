@@ -21,7 +21,7 @@ class FileListItem(BoxLayout, ListItemButton):
 class FileList(StackLayout):
     directory = StringProperty()
     file_list = ObjectProperty()
-    files = ListProperty()
+    files = ListProperty(os.listdir("/home/leny/Images/wallpapers"))
 
     def filename_converter(self, index, filename):
         result = {
