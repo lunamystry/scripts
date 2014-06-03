@@ -14,8 +14,8 @@ non-standard dependencies: lxml
 import lxml.html
 import urllib.request, urllib.error, urllib.parse
 
-url = "http://dept.ee.wits.ac.za/~cheng/ELEN4017/lecture_notes/"
-save_path = "/home/leny/University/networkfun/lecture_notes/"
+url = "http://dept.ee.wits.ac.za/~cheng/ELEN4017/tuts/"
+save_path = "/home/leny/University/networkfun/tutorials/"
 
 # fetch the page
 res = urllib.request.urlopen(url)
