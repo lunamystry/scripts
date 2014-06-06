@@ -96,5 +96,11 @@ class Lyconfig(App):
                 else:
                     sys.stdout.write(line)
 
+    def rename(self, directory, filename, new_filename):
+        old_path = os.path.join(directory, filename)
+        new_path = os.path.join(directory, new_filename)
+        if os.path.isfile(old_path):
+            os.rename(old_path, new_path)
+
 if __name__ == "__main__":
     Lyconfig().run()

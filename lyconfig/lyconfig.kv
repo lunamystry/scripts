@@ -25,11 +25,10 @@ MainView:
         pos_hint: {"center_y": .5}
         id: input_label
         text: root.filename
+        on_text: app.rename(root.directory, root.filename, self.text)
     BoxLayout:
         size_hint: 0.1, None
         orientation: "vertical"
-        Button:
-            text: "rename"
         Button:
             text: "set"
             on_release: app.set_wallpaper(os.path.join(root.directory, root.filename))
