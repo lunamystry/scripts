@@ -39,6 +39,7 @@ class EditableLabel(BoxLayout, Label):
             self.remove_widget(obj)
             self.text = obj.text
         self.field = Button(text=self.text,
+                            background_color=[1, 0, 0, 0],
                             on_press=self.edit)
         self.add_widget(self.field)
 
