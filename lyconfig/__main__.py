@@ -26,18 +26,18 @@ class EditableLabel(BoxLayout, Label):
         super(EditableLabel, self).__init__(**kwargs)
         self.show(None)
 
-    def edit(self, obj):
-        if obj is not None:
-            self.remove_widget(obj)
+    def edit(self, label):
+        if label is not None:
+            self.remove_widget(label)
         self.field = TextInput(text=self.text,
                                on_text_validate=self.show,
                                multiline=False)
         self.add_widget(self.field)
 
-    def show(self, obj):
-        if obj is not None:
-            self.remove_widget(obj)
-            self.text = obj.text
+    def show(self, textinput):
+        if textinput is not None:
+            self.remove_widget(textinput)
+            self.text = textinput.text
         self.field = Button(text=self.text,
                             background_color=[1, 0, 0, 0],
                             on_press=self.edit)
