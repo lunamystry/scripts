@@ -2,6 +2,7 @@ import kivy
 kivy.require('1.8.0')
 
 from kivy.app import App
+from kivy.uix.button import Button
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.stacklayout import StackLayout
@@ -14,6 +15,26 @@ import fileinput
 import sys
 import os
 import re
+
+
+class EditableLabel(BoxLayout):
+    field = ObjectProperty()
+
+    def __init__(self, **kwargs):
+        super(EditableLabel, self).__init__(**kwargs)
+        self.show(None)
+
+    def edit(self, obj):
+        if obj is not None:
+            self.remove_widget(obj)
+        self.field = Button(text="done", on_press=self.show)
+        self.add_widget(self.field)
+
+    def show(self, obj):
+        if obj is not None:
+            self.remove_widget(obj)
+        self.field = Button(text="edit", on_press=self.edit)
+        self.add_widget(self.field)
 
 
 class FileListItem(BoxLayout, ListItemButton):
