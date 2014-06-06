@@ -16,12 +16,17 @@ MainView:
         height: root.height
         source: os.path.join(root.directory, root.filename)
     Label:
+        id: input_label
         text: root.filename
-    ListItemButton:
-        size_hint: 0.2, None
-        height: 0.9*root.height
-        text: "set"
-        on_release: app.set_wallpaper(os.path.join(root.directory, root.filename))
+    BoxLayout:
+        orientation: "vertical"
+        size_hint_x: None
+        width: "100dp"
+        Button:
+            text: "rename"
+        Button:
+            text: "set"
+            on_release: app.set_wallpaper(os.path.join(root.directory, root.filename))
 
 <FileList>:
     file_list: file_list
