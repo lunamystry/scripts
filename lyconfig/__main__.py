@@ -22,6 +22,7 @@ class FileListItem(BoxLayout, ListItemButton):
 
 
 class FileList(StackLayout):
+    label = ObjectProperty()
     directory = StringProperty()
     file_list = ObjectProperty()
     files = ListProperty(os.listdir("/home/leny/Images/wallpapers"))
