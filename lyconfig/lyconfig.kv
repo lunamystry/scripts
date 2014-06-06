@@ -1,0 +1,74 @@
+#: kivy 1.8.0
+#:import la kivy.adapters.listadapter
+#:import lbl kivy.uix.label
+#:import ok __main__
+#:import os os
+
+MainView:
+
+<EditableLabel>:
+    size_hint: 1, None
+    height: "30dp"
+    spacing: 0
+
+
+<FileListItem>:
+    size_hint: 1, None
+    selected_color: (0.2, 0.1, 0.2, 1.0)
+
+    Image:
+        size_hint: 0.3, None
+        height: root.height
+        source: os.path.join(root.directory, root.filename)
+    EditableLabel:
+        size_hint: 0.6, None
+        pos_hint: {"center_y": .5}
+        id: input_label
+        text: root.filename
+        on_text: app.rename(root.directory, root.filename, self.text)
+    BoxLayout:
+        size_hint: 0.1, None
+        orientation: "vertical"
+        Button:
+            text: "set"
+            on_release: app.set_wallpaper(os.path.join(root.directory, root.filename))
+
+
+<FileList>:
+    file_list: file_list
+    ListView:
+        id: file_list
+        adapter:
+            la.ListAdapter(data=root.files, cls=ok.FileListItem,
+            args_converter=root.filename_converter)
+
+
+<MainView>:
+    anchor_y: "center"
+    BoxLayout:
+        orientation: "vertical"
+        BoxLayout:
+            size_hint: 1, None
+            pos_hint: {"center_x": .5}
+            height: "30dp"
+            spacing: 0
+            TextInput:
+                id: wallpaper_dir_input
+                on_text: file_list.update()
+                on_text_validate: file_list.update()
+                multiline: False
+                hint_text: "wallpaper directory..."
+                text: "/home/leny/Images/wallpapers"
+
+        BoxLayout:
+            BoxLayout:
+                orientation: "vertical"
+                size_hint: 0.1, 1
+                FileList:
+                    id: file_list
+                    directory: wallpaper_dir_input.text
+
+        Label:
+            size_hint: 1, None
+            height: "25dp"
+            text: wallpaper_dir_input.text
