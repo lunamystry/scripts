@@ -28,7 +28,7 @@ class EditableLabel(BoxLayout, Label):
 
     def edit(self, label):
         if label is not None:
-            self.remove_widget(label)
+            self.remove_widget(self.field)
         self.field = TextInput(text=self.text,
                                on_text_validate=self.show,
                                focus=True,
@@ -42,7 +42,7 @@ class EditableLabel(BoxLayout, Label):
 
     def show(self, textinput):
         if textinput is not None:
-            self.remove_widget(textinput)
+            self.remove_widget(self.field)
             self.text = textinput.text
         self.field = Button(text=self.text,
                             background_color=[1, 0, 0, 0],
