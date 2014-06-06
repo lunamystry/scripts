@@ -17,16 +17,17 @@ MainView:
     selected_color: (0.2, 0.1, 0.2, 1.0)
 
     Image:
-        size_hint: None, None
+        size_hint: 0.3, None
         height: root.height
         source: os.path.join(root.directory, root.filename)
-    Label:
+    EditableLabel:
+        size_hint: 0.6, None
+        pos_hint: {"center_y": .5}
         id: input_label
         text: root.filename
     BoxLayout:
+        size_hint: 0.1, None
         orientation: "vertical"
-        size_hint_x: None
-        width: "100dp"
         Button:
             text: "rename"
         Button:
@@ -47,8 +48,6 @@ MainView:
     anchor_y: "center"
     BoxLayout:
         orientation: "vertical"
-        EditableLabel:
-            text: "default..."
         BoxLayout:
             size_hint: 1, None
             pos_hint: {"center_x": .5}
