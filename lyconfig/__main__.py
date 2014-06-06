@@ -3,6 +3,7 @@ kivy.require('1.8.0')
 
 from kivy.app import App
 from kivy.uix.button import Button
+from kivy.uix.textinput import TextInput
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.stacklayout import StackLayout
@@ -19,6 +20,7 @@ import re
 
 class EditableLabel(BoxLayout):
     field = ObjectProperty()
+    text = StringProperty("default...")
 
     def __init__(self, **kwargs):
         super(EditableLabel, self).__init__(**kwargs)
@@ -27,13 +29,17 @@ class EditableLabel(BoxLayout):
     def edit(self, obj):
         if obj is not None:
             self.remove_widget(obj)
-        self.field = Button(text="done", on_press=self.show)
+        self.field = TextInput(text=self.text,
+                               on_text_validate=self.show,
+                               multiline=False)
         self.add_widget(self.field)
 
     def show(self, obj):
         if obj is not None:
             self.remove_widget(obj)
-        self.field = Button(text="edit", on_press=self.edit)
+            self.text = obj.text
+        self.field = Button(text=self.text,
+                            on_press=self.edit)
         self.add_widget(self.field)
 
 
