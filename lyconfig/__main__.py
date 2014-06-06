@@ -31,8 +31,14 @@ class EditableLabel(BoxLayout, Label):
             self.remove_widget(label)
         self.field = TextInput(text=self.text,
                                on_text_validate=self.show,
+                               focus=True,
                                multiline=False)
+        self.field.bind(focus=self.on_focus)
         self.add_widget(self.field)
+
+    def on_focus(self, instance, value):
+        if not value:
+            self.show(instance)
 
     def show(self, textinput):
         if textinput is not None:
