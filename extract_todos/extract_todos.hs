@@ -1,4 +1,7 @@
 import System.Environment (getArgs)
+import System.IO (readFile)
+import Control.Applicative
+
 
 main :: IO ()
 main = do
@@ -7,5 +10,7 @@ main = do
 
 
 find_todos:: String -> IO ()
-find_todos arg = do
-    putStrLn ("Hello " ++ arg)
+find_todos filename = do
+    putStrLn ("reading: " ++ filename)
+    content <- tail <$> (readFile filename)
+    putStrLn (content)
