@@ -1,5 +1,6 @@
 import System.Environment (getArgs)
 import System.IO (readFile)
+import Data.List (isInfixOf)
 import Control.Applicative
 
 
@@ -11,6 +12,11 @@ main = do
 
 print_todos:: String -> IO ()
 print_todos filename = do
-    putStrLn ("reading: " ++ filename)
     content <- readFile filename
-    mapM_ print $ lines content
+    putStrLn ("TODOs in the file: " ++ filename)
+    mapM_ print $ filter isTodoLine $ lines content
+
+
+isTodoLine:: String -> Bool
+isTodoLine = isInfixOf "TODO"
+
