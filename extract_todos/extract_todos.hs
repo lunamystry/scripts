@@ -6,11 +6,11 @@ import Control.Applicative
 main :: IO ()
 main = do
   args <- getArgs
-  mapM_ find_todos args
+  mapM_ print_todos args
 
 
-find_todos:: String -> IO ()
-find_todos filename = do
+print_todos:: String -> IO ()
+print_todos filename = do
     putStrLn ("reading: " ++ filename)
-    content <- tail <$> (readFile filename)
-    putStrLn (content)
+    content <- readFile filename
+    mapM_ print $ lines content
