@@ -8,10 +8,14 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.stacklayout import StackLayout
+from kivy.uix.settings import SettingsWithSidebar
 from kivy.uix.listview import ListItemButton
 from kivy.properties import ObjectProperty
 from kivy.properties import StringProperty
 from kivy.properties import ListProperty
+
+from settingsjson import settings_json
+
 import subprocess
 import fileinput
 import sys
@@ -79,8 +83,19 @@ class MainView(AnchorLayout):
 
 class Lyconfig(App):
     def build(self):
+        self.settings_cls = SettingsWithSidebar
         main_view = MainView()
         return main_view
+
+    def build_config(self, config):
+        config.setdefaults('example', {
+            'boolexample': True,
+            'wallpaper_options': 'scale'})
+
+    def build_settings(self, settings):
+        settings.add_json_panel('Panel Name',
+                                self.config,
+                                data=settings_json)
 
     def set_wallpaper(self, filepath):
         command = "feh --bg-scale " + filepath

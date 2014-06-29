@@ -49,11 +49,15 @@ MainView:
         orientation: "vertical"
         BoxLayout:
             size_hint: 1, None
-            pos_hint: {"center_x": .5}
             height: "30dp"
-            spacing: 0
+            Button:
+                text: "settings"
+                size_hint: 0.2, 1
+                on_release: app.open_settings()
             TextInput:
                 id: wallpaper_dir_input
+                size_hint: 0.8, 1
+                pos_hint: {"center_x": .5}
                 on_text: file_list.update()
                 on_text_validate: file_list.update()
                 multiline: False
