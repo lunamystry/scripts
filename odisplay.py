@@ -10,7 +10,7 @@ creation date: 08 July 2011
 import argparse
 import logging
 import subprocess
-import os
+from gi.repository import Notify
 
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)s: %(message)s')
@@ -72,9 +72,10 @@ def switch_on(position, size):
     cmd = cmd.replace("--auto", "--mode " + size)
     cmd = cmd.replace("right-of", position)
     run_command(cmd)
-    logging.info("odisplay size: " + size)
-    logging.info("odiplay position: " + position)
-    logging.info("VGA is probably on")
+    msg = ("odisplay size: {0}\n"
+           "odiplay position: {1}\n"
+           "VGA is probably on").format(size, position)
+    notify(msg)
 
 
 def switch_off():
@@ -82,8 +83,14 @@ def switch_off():
     logging.info("Switching off")
     cmd = "xrandr --output VGA1 --off"
     run_command(cmd)
-    logging.info("VGA is probably off")
+    notify("VGA is probably off")
 
+def notify(message):
+    Notify.init("odisplay.py")
+    notification = Notify.Notification.new("odisplay.py", message,
+                                           "video-display")
+    notification.show()
+    logging.info(message)
 
 def run_command(command):
     process = subprocess.Popen(command,
