@@ -1,6 +1,6 @@
 import System.Environment (getArgs)
 import System.IO (readFile)
-import Data.List (isInfixOf)
+import Data.List (isInfixOf, or)
 import Control.Applicative
 import Control.Monad
 import Control.Monad.Reader
@@ -21,4 +21,6 @@ print_todos filename = do
 
 todoLines = filter isTodoLine
     where
-        isTodoLine x = (||) (isInfixOf "TODO" x) (isInfixOf "FIX" x)
+        -- isTodoLine x = or $ map (\y -> isInfixOf y x) ["TODO", "BUG"]
+        -- isTodoLine x = or . map (`isInfixOf` x) $ ["TODO", "BUG"]
+        isTodoLine line = any (`isInfixOf` line) ["TODO", "BUG"]
