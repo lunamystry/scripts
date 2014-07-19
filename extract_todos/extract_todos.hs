@@ -19,9 +19,6 @@ print_todos filename = do
     mapM_ print $ todoLines $ lines content
 
 
-todoLines = filter (liftM2 (||) isTodoLine isBugLine)
+todoLines = filter isTodoLine
     where
-        isTodoLine = isInfixOf "TODO"
-        isBugLine = isInfixOf "BUG"
-
-
+        isTodoLine x = (||) (isInfixOf "TODO" x) (isInfixOf "FIX" x)
