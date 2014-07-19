@@ -48,13 +48,13 @@ def parse_args():
     args = parser.parse_args()
     if(args.mode == 'on'):
         if args.below:
-           switch_on('below', args.size)
+            switch_on('below', args.size)
         elif args.left:
-           switch_on('left', args.size)
+            switch_on('left', args.size)
         elif args.above:
-           switch_on('above', args.size)
+            switch_on('above', args.size)
         else:
-           switch_on('right', args.size)
+            switch_on('right', args.size)
     elif(args.mode == 'off'):
         switch_off()
     else:
@@ -85,12 +85,14 @@ def switch_off():
     run_command(cmd)
     notify("VGA is probably off")
 
+
 def notify(message):
     Notify.init("odisplay.py")
     notification = Notify.Notification.new("odisplay.py", message,
                                            "video-display")
     notification.show()
     logging.info(message)
+
 
 def run_command(command):
     process = subprocess.Popen(command,
@@ -99,6 +101,12 @@ def run_command(command):
                                stderr=subprocess.PIPE)
     return process.communicate()
 
+
+def auto_run():
+    '''
+      uses pyinotify to check if /sys/class/drm/card0-VGA-1/status has changed
+    '''
+    pass
 
 if __name__ == "__main__":
     parse_args()
