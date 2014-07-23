@@ -35,4 +35,4 @@ todoLines = filter isTodoLine
         isTodoLine line = any (`isInfixOf` line) ["TODO", "BUG"]
 
 numberedLines:: [String] -> [String]
-numberedLines l = [(++) (show $ snd line) ((++) " " (fst line)) | line <- zip l [1..length l]]
+numberedLines lines = [(++) (show $ snd line) ((++) " " (fst line)) | line <- zip lines [1..length lines]]
