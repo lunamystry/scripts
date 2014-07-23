@@ -16,6 +16,7 @@ print_todos filename = do
     mapM_ print $ todoLines $ lines content
 
 
+todoLines:: [String] -> [String]
 todoLines = filter isTodoLine
     where
         isTodoLine line = any (`isInfixOf` line) ["TODO", "BUG"]
