@@ -1,4 +1,5 @@
-import System.Directory (getDirectoryContents)
+import System.Directory (doesFileExist, getDirectoryContents)
+import System.FilePath ((</>))
 import System.Environment (getArgs)
 import System.IO (readFile)
 import Data.List (isInfixOf, any, null)
@@ -7,11 +8,18 @@ import Data.List (isInfixOf, any, null)
 main :: IO ()
 main = do
   args <- getArgs
-  content <- getDirectoryContents "."
   if null args then
-    mapM_ printTodos $ filter (`notElem` [".", ".."]) content
+    mapDir printTodos "."
   else
     mapM_ printTodos args
+
+
+mapDir:: (FilePath -> IO ()) -> FilePath -> IO ()
+mapDir fn name = do
+    isFile <- doesFileExist name
+    if isFile then fn name
+    else getDirectoryContents name >>=
+        mapM_ (mapDir fn . (name </>)) . filter (`notElem` [".", ".."])
 
 
 printTodos:: String -> IO ()
