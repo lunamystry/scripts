@@ -9,13 +9,13 @@ main = do
   args <- getArgs
   content <- getDirectoryContents "."
   if null args then
-    print content
+    mapM_ printTodos $ filter (`notElem` [".", ".."]) content
   else
-    mapM_ print_todos args
+    mapM_ printTodos args
 
 
-print_todos:: String -> IO ()
-print_todos filename = do
+printTodos:: String -> IO ()
+printTodos filename = do
     content <- readFile filename
     putStrLn ("TODOs in the file: " ++ filename)
     mapM_ print $ todoLines $ lines content
