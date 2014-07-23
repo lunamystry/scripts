@@ -1,12 +1,17 @@
+import System.Directory (getDirectoryContents)
 import System.Environment (getArgs)
 import System.IO (readFile)
-import Data.List (isInfixOf, any)
+import Data.List (isInfixOf, any, null)
 
 
 main :: IO ()
 main = do
   args <- getArgs
-  mapM_ print_todos args
+  content <- getDirectoryContents "."
+  if null args then
+    print content
+  else
+    mapM_ print_todos args
 
 
 print_todos:: String -> IO ()
