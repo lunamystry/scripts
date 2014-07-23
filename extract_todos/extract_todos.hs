@@ -26,13 +26,9 @@ printTodos:: String -> IO ()
 printTodos filename = do
     content <- readFile filename
     putStrLn ("\nTODOs in the file: " ++ filename)
-    mapM_ putStrLn $ todoLines $ numberedLines $ lines content
-
-
-todoLines:: [String] -> [String]
-todoLines = filter isTodoLine
-    where
-        isTodoLine line = any (`isInfixOf` line) ["TODO", "BUG"]
-
-numberedLines:: [String] -> [String]
-numberedLines lines = [(++) (show $ snd line) ((++) " " (fst line)) | line <- zip lines [1..length lines]]
+    mapM_ putStrLn $ todoLines $ indexedLines $ lines content
+        where
+            todoLines = filter isTodoLine
+                where
+                    isTodoLine line = any (`isInfixOf` line) ["TODO", "BUG"]
+            indexedLines lines = zipWith (\x y -> show y ++ " " ++ x) lines [1..length lines]
