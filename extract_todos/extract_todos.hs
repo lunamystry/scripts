@@ -25,11 +25,14 @@ mapDir fn name = do
 printTodos:: String -> IO ()
 printTodos filename = do
     content <- readFile filename
-    putStrLn ("TODOs in the file: " ++ filename)
-    mapM_ print $ todoLines $ lines content
+    putStrLn ("\nTODOs in the file: " ++ filename)
+    mapM_ putStrLn $ todoLines $ numberedLines $ lines content
 
 
 todoLines:: [String] -> [String]
 todoLines = filter isTodoLine
     where
         isTodoLine line = any (`isInfixOf` line) ["TODO", "BUG"]
+
+numberedLines:: [String] -> [String]
+numberedLines l = [(++) (show $ snd line) ((++) " " (fst line)) | line <- zip l [1..length l]]
