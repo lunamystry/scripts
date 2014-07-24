@@ -1,2 +1,63 @@
-*.pyc
-__pycache__
+### https://raw.github.com/github/gitignore/bab15e82cb861b39216d0ab7ec0b3950bd73313e/Haskell.gitignore
+
+dist
+cabal-dev
+*.o
+*.hi
+*.chi
+*.chs.h
+.virtualenv
+.hsenv
+.cabal-sandbox/
+cabal.sandbox.config
+cabal.config
+
+
+### https://raw.github.com/github/gitignore/bab15e82cb861b39216d0ab7ec0b3950bd73313e/Python.gitignore
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+
+# Sphinx documentation
+docs/_build/
+
+
