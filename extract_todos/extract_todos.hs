@@ -1,4 +1,4 @@
-import System.Directory (doesFileExist, getDirectoryContents)
+import System.Directory (doesFileExist, getCurrentDirectory)
 import System.FilePath ((</>))
 import System.FilePath.Find
 import System.Environment (getArgs)
@@ -9,23 +9,20 @@ notAllowedExtensions = [".hi", ".o", ""]
 
 main :: IO ()
 main = do
-  args <- getArgs
-  if null args then
-    mapDir printTodos "."
-  else
-    mapM_ printTodos args
+    args <- getArgs
+    if null args then
+       mapM_ printTodos =<< allowedFiles =<< getCurrentDirectory
+    else
+      mapM_ printTodos args
 
 
-mapDir:: (FilePath -> IO ()) -> FilePath -> IO ()
-mapDir fn name = do
-    isFile <- doesFileExist name
-    if isFile then fn name
-    else find always (isAllowed) name >>=
-        mapM_ (mapDir fn . (name </>)) . filter (`notElem` [".", ".."])
+allowedFiles:: FilePath -> IO [FilePath]
+allowedFiles =
+    find always (isAllowed)
     where
-        isAllowed = foldl1 (&&?) $ isAllowedExtensions ++ isOther
+        isAllowed = foldl1 (&&?) $ isAllowedExtensions ++ isOtherAllowed
         isAllowedExtensions = map (extension /=?) notAllowedExtensions
-        isOther = [fileType ==? RegularFile]
+        isOtherAllowed = [(fileType ==? RegularFile)]
 
 
 printTodos:: String -> IO ()
