@@ -23,7 +23,7 @@ allowedFiles =
     where
         isAllowed = foldl1 (&&?) $ isAllowedExtensions ++ isOtherAllowed
         isAllowedExtensions = map (extension /=?) notAllowedExtensions
-        isOtherAllowed = [(fileType ==? RegularFile), ((not . isPrefixOf ".") `liftM` directory)]
+        isOtherAllowed = [(fileType ==? RegularFile)]
 
 
 printTodos:: String -> IO ()
