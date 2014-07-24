@@ -1,17 +1,25 @@
 import System.Directory (doesFileExist, getDirectoryContents)
 import System.FilePath ((</>))
+import System.FilePath.Find
 import System.Environment (getArgs)
 import System.IO (readFile)
 import Data.List (isInfixOf, any, null)
 
+notAllowedExtensions = [".hi", ".o", ""]
 
 main :: IO ()
 main = do
   args <- getArgs
-  if null args then
-    mapDir printTodos "."
-  else
-    mapM_ printTodos args
+  files <- find always (isAllowed) "."
+  print files
+      where 
+          isAllowed = foldl1 (&&?) $ isAllowedExtensions ++ isOther
+          isAllowedExtensions = map (extension /=?) notAllowedExtensions
+          isOther = [fileType ==? RegularFile]
+  -- if null args then
+  --   mapDir printTodos "."
+  -- else
+  --   mapM_ printTodos args
 
 
 mapDir:: (FilePath -> IO ()) -> FilePath -> IO ()
@@ -25,7 +33,7 @@ mapDir fn name = do
 printTodos:: String -> IO ()
 printTodos filename = do
     content <- readFile filename
-    putStrLn ("\nTODOs in the file: " ++ filename)
+    putStrLn ("\nin file: " ++ filename)
     mapM_ putStrLn $ todoLines $ indexedLines $ lines content
         where
             todoLines = filter isTodoLine
