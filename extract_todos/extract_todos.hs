@@ -3,7 +3,8 @@ import System.FilePath ((</>))
 import System.FilePath.Find
 import System.Environment (getArgs)
 import System.IO (readFile)
-import Data.List (isInfixOf, any, null)
+import Data.List (isInfixOf, isPrefixOf, any, null)
+import Control.Monad (liftM)
 
 notAllowedExtensions = [".hi", ".o", ""]
 
@@ -22,7 +23,7 @@ allowedFiles =
     where
         isAllowed = foldl1 (&&?) $ isAllowedExtensions ++ isOtherAllowed
         isAllowedExtensions = map (extension /=?) notAllowedExtensions
-        isOtherAllowed = [(fileType ==? RegularFile)]
+        isOtherAllowed = [(fileType ==? RegularFile), ((not . isPrefixOf ".") `liftM` directory)]
 
 
 printTodos:: String -> IO ()
