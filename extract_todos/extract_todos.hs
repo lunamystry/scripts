@@ -5,7 +5,7 @@ import System.Environment (getArgs)
 import System.IO (readFile)
 import Data.List (isInfixOf, any, null)
 
-notAllowedPatterns = ["*.hi", "*.o", ""]
+notAllowedExtensions = [".hi", ".o", ""]
 
 main :: IO ()
 main = do
@@ -20,8 +20,8 @@ allowedFiles:: FilePath -> IO [FilePath]
 allowedFiles =
     find always (isAllowed)
     where
-        isAllowed = foldl1 (&&?) $ isAllowedPatterns ++ isOtherAllowed
-        isAllowedPatterns = map (fileName /~?) notAllowedPatterns
+        isAllowed = foldl1 (&&?) $ isAllowedExtensions ++ isOtherAllowed
+        isAllowedExtensions = map (extension /=?) notAllowedExtensions
         isOtherAllowed = [(fileType ==? RegularFile)]
 
 
