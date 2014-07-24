@@ -5,7 +5,7 @@ import System.Environment (getArgs)
 import System.IO (readFile)
 import Data.List (isInfixOf, any, null)
 
-notAllowedExtensions = [".hi", ".o", ""]
+notAllowedPatterns = ["*.hi", "*.o", ""]
 
 main :: IO ()
 main = do
@@ -20,18 +20,19 @@ allowedFiles:: FilePath -> IO [FilePath]
 allowedFiles =
     find always (isAllowed)
     where
-        isAllowed = foldl1 (&&?) $ isAllowedExtensions ++ isOtherAllowed
-        isAllowedExtensions = map (extension /=?) notAllowedExtensions
+        isAllowed = foldl1 (&&?) $ isAllowedPatterns ++ isOtherAllowed
+        isAllowedPatterns = map (fileName /~?) notAllowedPatterns
         isOtherAllowed = [(fileType ==? RegularFile)]
 
 
 printTodos:: String -> IO ()
 printTodos filename = do
     content <- readFile filename
-    putStrLn ("\nin file: " ++ filename)
-    mapM_ putStrLn $ todoLines $ indexedLines $ lines content
-        where
-            todoLines = filter isTodoLine
-                where
-                    isTodoLine line = any (`isInfixOf` line) ["TODO", "BUG"]
-            indexedLines lines = zipWith (\x y -> show y ++ " " ++ x) lines [1..length lines]
+    mapM_ putStrLn $ withFormatting $ todoLines $ indexedLines $ lines content
+    where
+        todoLines = filter isTodoLine
+            where
+                isTodoLine line = any (`isInfixOf` line) ["TODO", "BUG"]
+        indexedLines lines = zipWith (\x y -> show y ++ " " ++ x) lines [1..length lines]
+        withFormatting lines = if null lines then lines
+                               else ("\n" ++ filename) : (map ("\t" ++) lines)
