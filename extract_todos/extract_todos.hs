@@ -10,24 +10,22 @@ notAllowedExtensions = [".hi", ".o", ""]
 main :: IO ()
 main = do
   args <- getArgs
-  files <- find always (isAllowed) "."
-  print files
-      where 
-          isAllowed = foldl1 (&&?) $ isAllowedExtensions ++ isOther
-          isAllowedExtensions = map (extension /=?) notAllowedExtensions
-          isOther = [fileType ==? RegularFile]
-  -- if null args then
-  --   mapDir printTodos "."
-  -- else
-  --   mapM_ printTodos args
+  if null args then
+    mapDir printTodos "."
+  else
+    mapM_ printTodos args
 
 
 mapDir:: (FilePath -> IO ()) -> FilePath -> IO ()
 mapDir fn name = do
     isFile <- doesFileExist name
     if isFile then fn name
-    else getDirectoryContents name >>=
+    else find always (isAllowed) name >>=
         mapM_ (mapDir fn . (name </>)) . filter (`notElem` [".", ".."])
+    where
+        isAllowed = foldl1 (&&?) $ isAllowedExtensions ++ isOther
+        isAllowedExtensions = map (extension /=?) notAllowedExtensions
+        isOther = [fileType ==? RegularFile]
 
 
 printTodos:: String -> IO ()
