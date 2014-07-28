@@ -9,7 +9,6 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.settings import SettingsWithSidebar
-from kivy.uix.listview import ListItemButton
 from kivy.properties import ObjectProperty
 from kivy.properties import StringProperty
 from kivy.properties import ListProperty
@@ -54,12 +53,12 @@ class EditableLabel(BoxLayout, Label):
         self.add_widget(self.field)
 
 
-class FileListItem(BoxLayout, ListItemButton):
+class FileListItem(BoxLayout, Label):
     directory = StringProperty()
     filename = StringProperty()
 
 
-class FileList(StackLayout):
+class FileList(BoxLayout):
     label = ObjectProperty()
     directory = StringProperty()
     file_list = ObjectProperty()
