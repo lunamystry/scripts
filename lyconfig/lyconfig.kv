@@ -15,6 +15,12 @@ MainView:
 <FileListItem>:
     size_hint: 1, None
     selected_color: (0.2, 0.1, 0.2, 1.0)
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 0.7
+        Rectangle:
+            pos: self.pos
+            size: self.size
 
     Image:
         size_hint: 0.3, None
@@ -29,7 +35,7 @@ MainView:
     BoxLayout:
         size_hint: 0.1, None
         orientation: "vertical"
-        Button:
+        TextButton:
             text: "set"
             on_release: app.set_wallpaper(os.path.join(root.directory, root.filename))
 
@@ -43,14 +49,31 @@ MainView:
             args_converter=root.filename_converter)
 
 
+<TextButton@Button>:
+    bold: True
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 0.5
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
 <MainView>:
-    anchor_y: "center"
+    canvas:
+        Color:
+            rgba: .5, 0, .5, self.opacity - 0.2
+        Rectangle:
+            pos: self.pos
+            size: self.size
     BoxLayout:
         orientation: "vertical"
+        padding: "5dp"
+        spacing: '5dp'
         BoxLayout:
             size_hint: 1, None
             height: "30dp"
-            Button:
+            spacing: '5dp'
+            TextButton:
                 text: "settings"
                 size_hint: 0.2, 1
                 on_release: app.open_settings()
@@ -76,3 +99,10 @@ MainView:
             size_hint: 1, None
             height: "25dp"
             text: wallpaper_dir_input.text
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 0.5
+                BorderImage:
+                    pos: self.pos
+                    size: self.size
+                    source: 'images/round.png'
