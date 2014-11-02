@@ -17,6 +17,9 @@ Point = namedtuple("Point", "row col")
 
 class Word():
     def __init__(self, text, direction, start, grid):
+        # The word must be stripped of hyphens and numbers
+        # x and y must be on the grid and the length must be less than grid
+        # The word must be lowercase
         self.text = text
         self.direction = direction
         self.start = start
@@ -27,14 +30,14 @@ class Word():
         points = []
         row = self.start.row
         col = self.start.col
-        points.append((row, col))
+        points.append(Point(row, col))
         for letter in self.text[1:]:
-            points.append((row, col))
             row += row_incr
             col += col_incr
             if (row < 0 or col < 0 or row > len(grid) or col > len(grid[0])):
                 logging.debug("row:{0} col:{1}".format(row, col))
                 raise IndexError(self.text + " is not completely inside grid")
+            points.append(Point(row, col))
         return points
 
     def _increments(self):
@@ -79,30 +82,12 @@ def make_grid(x, y):
     return bg
 
 
-def place(word, y, x, direction, grid):
+def place(word, grid):
     '''
         tries to place the word on position x and y
     '''
-    # The word must be stripped of hyphens and numbers
-    # x and y must be on the grid and the length must be less than grid
-    # The word must be lowercase
-    for i, letter in enumerate(word):
-        if direction == 'EAST':
-            grid[y][x + i] = letter
-        if direction == 'WEST':
-            grid[y][x - i] = letter
-        if direction == 'SOUTH':
-            grid[y + i][x] = letter
-        if direction == 'NORTH':
-            grid[y - i][x] = letter
-        if direction == 'SOUTHEAST':
-            grid[y + i][x + i] = letter
-        if direction == 'NORTHWEST':
-            grid[y - i][x - i] = letter
-        if direction == 'SOUTHWEST':
-            grid[y + i][x - i] = letter
-        if direction == 'NORTHEAST':
-            grid[y - i][x + i] = letter
+    for i, point in enumerate(word.points):
+        grid[point.row][point.col] = word.text[i]
 
 
 def randomly_place(words, grid):
@@ -135,7 +120,7 @@ def randomly_place(words, grid):
             x = int(random.uniform(directions[dir_index].min_x,
                 directions[dir_index].max_x))
             word = Word(text, directions[dir_index].dir, Point(y, x), grid)
-            place(word.text, y, x, directions[dir_index].dir, grid)
+            place(word, grid)
         except IndexError as e :
             logging.debug("x:{0} y:{1} word: {2} dir: {3}".format(x, y, text,
                 directions[dir_index].dir))
