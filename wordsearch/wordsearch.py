@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.DEBUG,
                     format='%(message)s')
 
 class Word():
-    def __init__(self, text, direction, start):
+    def __init__(self, text, direction, start, grid):
         self.text = text
         self.direction = direction
         self.start = start
@@ -161,5 +161,5 @@ if __name__ == '__main__':
     #     logging.info(" ".join(row))
 
     Point = namedtuple("Point", "row col")
-    word = Word("WORD", "SOUTHWEST", Point(0, 0))
+    word = Word("WORD", "SOUTHWEST", Point(0, 0), grid)
     logging.info(word.points)
