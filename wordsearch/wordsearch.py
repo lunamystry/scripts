@@ -21,6 +21,18 @@ class Word():
         self.points = self._calculate_points();
 
     def _calculate_points(self):
+        row_incr, col_incr = self._increments()
+        points = []
+        row = self.start.row
+        col = self.start.col
+        points.append((row, col))
+        for letter in self.text:
+            row += row_incr
+            col += col_incr
+            points.append((row, col))
+        return points
+
+    def _increments(self):
         col_incr = 0
         row_incr = 0
         if self.direction == 'EAST':
@@ -43,16 +55,7 @@ class Word():
         elif self.direction == 'NORTHWEST':
             row_incr = -1
             col_incr = -1
-
-        points = []
-        row = self.start.row
-        col = self.start.col
-        points.append((row, col))
-        for letter in self.text:
-            row += row_incr
-            col += col_incr
-            points.append((row, col))
-        return points
+        return row_incr, col_incr
 
 def make_grid(x, y):
     '''
@@ -158,5 +161,5 @@ if __name__ == '__main__':
     #     logging.info(" ".join(row))
 
     Point = namedtuple("Point", "row col")
-    word = Word("WORD", "EAST", Point(0, 0))
+    word = Word("WORD", "SOUTHWEST", Point(0, 0))
     logging.info(word.points)
