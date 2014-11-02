@@ -29,6 +29,8 @@ class Word():
         for letter in self.text:
             row += row_incr
             col += col_incr
+            if (row < 0 or col < 0 or row > len(grid) or col > len(grid[0])):
+                raise IndexError(self.text + " is not completely inside grid")
             points.append((row, col))
         return points
 
@@ -57,6 +59,7 @@ class Word():
             col_incr = -1
         return row_incr, col_incr
 
+
 def make_grid(x, y):
     '''
         input: size of the grid
@@ -71,6 +74,7 @@ def make_grid(x, y):
             row.append(alphabet[aindex])
         bg.append(row)
     return bg
+
 
 def place(word, y, x, direction, grid):
     '''
@@ -121,6 +125,7 @@ def place(word, y, x, direction, grid):
                 break
             grid[y - i][x + i] = letter
 
+
 def randomly_place(words, grid):
     '''
         takes a list of words and places them randowly on the grid
@@ -154,6 +159,7 @@ def randomly_place(words, grid):
         except IndexError:
             logging.debug("x:{0} y:{1}".format(x, y))
 
+
 if __name__ == '__main__':
     grid = make_grid(10, 10)
     # randomly_place(["word", "igama", "leonard", "python"], grid)
@@ -161,5 +167,5 @@ if __name__ == '__main__':
     #     logging.info(" ".join(row))
 
     Point = namedtuple("Point", "row col")
-    word = Word("WORD", "SOUTHWEST", Point(0, 0), grid)
+    word = Word("WORD", "SOUTHEAST", Point(0, 0), grid)
     logging.info(word.points)
