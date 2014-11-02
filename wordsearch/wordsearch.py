@@ -90,6 +90,13 @@ def place(word, grid):
         grid[point.row][point.col] = word.text[i]
 
 
+def check_intersection(first, second):
+    for p1 in first.points:
+        for p2 in second.points:
+            if p1 == p2:
+                return True
+
+
 def randomly_place(words, grid):
     '''
         takes a list of words and places them randowly on the grid
@@ -129,8 +136,11 @@ def randomly_place(words, grid):
 
 if __name__ == '__main__':
     grid = make_grid(10, 10)
-    randomly_place(["word", "igama", "leonard", "python"], grid)
+    # randomly_place(["word", "igama", "leonard", "python"], grid)
+    python = Word("python", "NORTHEAST", Point(5, 2), grid)
+    leonard = Word("leonard", "NORTHWEST", Point(6, 7), grid)
+    place(python, grid)
+    place(leonard, grid)
+    print(check_intersection(python, leonard))
     for row in grid:
         logging.info(" ".join(row))
-    word = Word("python", "NORTHEAST", Point(5, 2), grid)
-
