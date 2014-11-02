@@ -13,15 +13,56 @@ from collections import namedtuple
 logging.basicConfig(level=logging.DEBUG,
                     format='%(message)s')
 
+class Word():
+    def __init__(self, text, direction, start):
+        self.text = text
+        self.direction = direction
+        self.start = start
+        self.points = self._calculate_points();
+
+    def _calculate_points(self):
+        col_incr = 0
+        row_incr = 0
+        if self.direction == 'EAST':
+            col_incr = 1
+        elif self.direction == 'WEST':
+            col_incr = -1
+        elif self.direction == 'SOUTH':
+            row_incr = 1
+        elif self.direction == 'NORTH':
+            row_incr = -1
+        elif self.direction == 'SOUTHEAST':
+            row_incr = 1
+            col_incr = 1
+        elif self.direction == 'SOUTHWEST':
+            row_incr = 1
+            col_incr = -1
+        elif self.direction == 'NORTHEAST':
+            row_incr = -1
+            col_incr = 1
+        elif self.direction == 'NORTHWEST':
+            row_incr = -1
+            col_incr = -1
+
+        points = []
+        row = self.start.row
+        col = self.start.col
+        points.append((row, col))
+        for letter in self.text:
+            row += row_incr
+            col += col_incr
+            points.append((row, col))
+        return points
+
 def make_grid(x, y):
     '''
         input: size of the grid
         returns: a list of strings representing the row of the grid
     '''
-    bg = list()
+    bg = []
     alphabet = "__________________________"
     for r in range(1, y + 1):
-        row = list()
+        row = []
         for c in range(1, x + 1):
             aindex = int(random.uniform(0, 26))
             row.append(alphabet[aindex])
@@ -102,7 +143,7 @@ def randomly_place(words, grid):
                     len(word) - 1, len(grid), 0, len(grid[0]) - (len(word) - 1))]
         dir_index = int(random.uniform(0, len(directions)))
         try:
-            y = int(random.uniform(directions[dir_index].min_y, 
+            y = int(random.uniform(directions[dir_index].min_y,
                 directions[dir_index].max_y))
             x = int(random.uniform(directions[dir_index].min_x,
                 directions[dir_index].max_x))
@@ -112,6 +153,10 @@ def randomly_place(words, grid):
 
 if __name__ == '__main__':
     grid = make_grid(10, 10)
-    randomly_place(["word", "igama", "leonard"], grid)
-    for row in grid:
-        logging.info(" ".join(row))
+    # randomly_place(["word", "igama", "leonard", "python"], grid)
+    # for row in grid:
+    #     logging.info(" ".join(row))
+
+    Point = namedtuple("Point", "row col")
+    word = Word("WORD", "EAST", Point(0, 0))
+    logging.info(word.points)
