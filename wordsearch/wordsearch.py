@@ -13,6 +13,8 @@ from collections import namedtuple
 logging.basicConfig(level=logging.DEBUG,
                     format='%(message)s')
 
+Point = namedtuple("Point", "row col")
+
 class Word():
     def __init__(self, text, direction, start, grid):
         self.text = text
@@ -26,12 +28,13 @@ class Word():
         row = self.start.row
         col = self.start.col
         points.append((row, col))
-        for letter in self.text:
+        for letter in self.text[1:]:
+            points.append((row, col))
             row += row_incr
             col += col_incr
             if (row < 0 or col < 0 or row > len(grid) or col > len(grid[0])):
+                logging.debug("row:{0} col:{1}".format(row, col))
                 raise IndexError(self.text + " is not completely inside grid")
-            points.append((row, col))
         return points
 
     def _increments(self):
@@ -85,44 +88,20 @@ def place(word, y, x, direction, grid):
     # The word must be lowercase
     for i, letter in enumerate(word):
         if direction == 'EAST':
-            if (x + len(word)) > len(grid[y]):
-                raise IndexError("columns out of range")
-                break
             grid[y][x + i] = letter
         if direction == 'WEST':
-            if (x - (len(word) - 1)) < 0:
-                raise IndexError("columns out of range")
-                break
             grid[y][x - i] = letter
         if direction == 'SOUTH':
-            if (y + len(word)) > len(grid[y]):
-                raise IndexError("columns out of range")
-                break
             grid[y + i][x] = letter
         if direction == 'NORTH':
-            if (y - (len(word) - 1)) < 0:
-                raise IndexError("columns out of range")
-                break
             grid[y - i][x] = letter
         if direction == 'SOUTHEAST':
-            if (x + len(word)) > len(grid[y]) or (y + len(word)) > len(grid[y]):
-                raise IndexError("columns out of range")
-                break
             grid[y + i][x + i] = letter
         if direction == 'NORTHWEST':
-            if (x - (len(word) - 1)) < 0 or (y - (len(word) - 1)) < 0:
-                raise IndexError("columns out of range")
-                break
             grid[y - i][x - i] = letter
         if direction == 'SOUTHWEST':
-            if (x - (len(word) - 1)) < 0 or (y + (len(word) - 1)) > len(grid[y]):
-                raise IndexError("columns out of range")
-                break
             grid[y + i][x - i] = letter
         if direction == 'NORTHEAST':
-            if (x + len(word)) > len(grid[y]) or (y - (len(word) - 1)) < 0:
-                raise IndexError("columns out of range")
-                break
             grid[y - i][x + i] = letter
 
 
@@ -130,42 +109,43 @@ def randomly_place(words, grid):
     '''
         takes a list of words and places them randowly on the grid
     '''
-    for word in words:
+    for text in words:
         Direction = namedtuple('Direction', 'dir min_y max_y min_x max_x')
         directions = [
                 Direction("EAST",
-                    0, len(grid), 0, len(grid[0]) - (len(word) - 1)),
+                    0, len(grid), 0, len(grid[0]) - (len(text) - 1)),
                 Direction("WEST",
-                    0, len(grid), len(word) - 1, len(grid[0])),
+                    0, len(grid), len(text) - 1, len(grid[0])),
                 Direction("SOUTH",
-                    0, len(grid) - (len(word) - 1), 0, len(grid[0])),
+                    0, len(grid) - (len(text) - 1), 0, len(grid[0])),
                 Direction("NORTH",
-                    len(word) - 1, len(grid), 0, len(grid[0])),
+                    len(text) - 1, len(grid), 0, len(grid[0])),
                 Direction("SOUTHEAST",
-                    0, len(grid) - (len(word) - 1), 0, len(grid[0]) - (len(word) - 1)),
+                    0, len(grid) - (len(text) - 1), 0, len(grid[0]) - (len(text) - 1)),
                 Direction("NORTHWEST",
-                    len(word) - 1, len(grid), len(word) - 1, len(grid[0])),
+                    len(text) - 1, len(grid), len(text) - 1, len(grid[0])),
                 Direction("SOUTHWEST",
-                    0, len(grid) - (len(word) - 1), len(word) - 1, len(grid[-1])),
+                    0, len(grid) - (len(text) - 1), len(text) - 1, len(grid[-1])),
                 Direction("NORTHEAST",
-                    len(word) - 1, len(grid), 0, len(grid[0]) - (len(word) - 1))]
+                    len(text) - 1, len(grid), 0, len(grid[0]) - (len(text) - 1))]
         dir_index = int(random.uniform(0, len(directions)))
         try:
             y = int(random.uniform(directions[dir_index].min_y,
                 directions[dir_index].max_y))
             x = int(random.uniform(directions[dir_index].min_x,
                 directions[dir_index].max_x))
-            place(word, y, x, directions[dir_index].dir, grid)
-        except IndexError:
-            logging.debug("x:{0} y:{1}".format(x, y))
+            word = Word(text, directions[dir_index].dir, Point(y, x), grid)
+            place(word.text, y, x, directions[dir_index].dir, grid)
+        except IndexError as e :
+            logging.debug("x:{0} y:{1} word: {2} dir: {3}".format(x, y, text,
+                directions[dir_index].dir))
+            raise e
 
 
 if __name__ == '__main__':
     grid = make_grid(10, 10)
-    # randomly_place(["word", "igama", "leonard", "python"], grid)
-    # for row in grid:
-    #     logging.info(" ".join(row))
+    randomly_place(["word", "igama", "leonard", "python"], grid)
+    for row in grid:
+        logging.info(" ".join(row))
+    word = Word("python", "NORTHEAST", Point(5, 2), grid)
 
-    Point = namedtuple("Point", "row col")
-    word = Word("WORD", "SOUTHEAST", Point(0, 0), grid)
-    logging.info(word.points)
