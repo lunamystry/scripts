@@ -62,3 +62,4 @@ if __name__ == '__main__':
     grid.place(leonard)
     print(grid)
     print(grid._check_intersection(python, leonard))
+    print(grid.words)
