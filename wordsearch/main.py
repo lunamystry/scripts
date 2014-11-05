@@ -3,68 +3,16 @@
 author: Leonard Mbuli <mail@mandla.me>
 
 creation date: 17 July 2014
-update date: 10 September 2014
+update date: 2 November 2014
 
 """
 import logging
 import random
-from collections import namedtuple
+from word import *
+from utils import *
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(message)s')
-
-Point = namedtuple("Point", "row col")
-
-class Word():
-    def __init__(self, text, direction, start, grid):
-        # The word must be stripped of hyphens and numbers
-        # x and y must be on the grid and the length must be less than grid
-        # The word must be lowercase
-        self.text = text
-        self.direction = direction
-        self.start = start
-        self.points = self._calculate_points();
-
-    def _calculate_points(self):
-        row_incr, col_incr = self._increments()
-        points = []
-        row = self.start.row
-        col = self.start.col
-        points.append(Point(row, col))
-        for letter in self.text[1:]:
-            row += row_incr
-            col += col_incr
-            if (row < 0 or col < 0 or row > len(grid) or col > len(grid[0])):
-                logging.debug("row:{0} col:{1}".format(row, col))
-                raise IndexError(self.text + " is not completely inside grid")
-            points.append(Point(row, col))
-        return points
-
-    def _increments(self):
-        col_incr = 0
-        row_incr = 0
-        if self.direction == 'EAST':
-            col_incr = 1
-        elif self.direction == 'WEST':
-            col_incr = -1
-        elif self.direction == 'SOUTH':
-            row_incr = 1
-        elif self.direction == 'NORTH':
-            row_incr = -1
-        elif self.direction == 'SOUTHEAST':
-            row_incr = 1
-            col_incr = 1
-        elif self.direction == 'SOUTHWEST':
-            row_incr = 1
-            col_incr = -1
-        elif self.direction == 'NORTHEAST':
-            row_incr = -1
-            col_incr = 1
-        elif self.direction == 'NORTHWEST':
-            row_incr = -1
-            col_incr = -1
-        return row_incr, col_incr
-
 
 def make_grid(x, y):
     '''
@@ -91,6 +39,9 @@ def place(word, grid):
 
 
 def check_intersection(first, second):
+    '''
+        Check if two words intersect
+    '''
     for p1 in first.points:
         for p2 in second.points:
             if p1 == p2:
