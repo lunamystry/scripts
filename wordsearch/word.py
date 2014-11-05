@@ -58,3 +58,9 @@ class Word():
             row_incr = -1
             col_incr = -1
         return row_incr, col_incr
+
+    def __str__(self):
+        return self.text
+
+    def __repr__(self):
+        return self.text
