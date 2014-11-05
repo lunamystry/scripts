@@ -28,7 +28,7 @@ class Word():
         for letter in self.text[1:]:
             row += row_incr
             col += col_incr
-            if (row < 0 or col < 0 or row > len(grid) or col > len(grid[0])):
+            if (row < 0 or col < 0 or row > grid.rows or col > grid.cols):
                 logging.debug("row:{0} col:{1}".format(row, col))
                 raise IndexError(self.text + " is not completely inside grid")
             points.append(Point(row, col))
