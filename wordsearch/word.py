@@ -8,6 +8,7 @@ update date: 5 November 2014
 """
 from utils import *
 
+
 class Word():
     def __init__(self, text, direction, start, grid):
         # The word must be stripped of hyphens and numbers
@@ -16,9 +17,9 @@ class Word():
         self.text = text
         self.direction = direction
         self.start = start
-        self.points = self._calculate_points();
+        self.points = self._calculate_points(grid);
 
-    def _calculate_points(self):
+    def _calculate_points(self, grid):
         row_incr, col_incr = self._increments()
         points = []
         row = self.start.row

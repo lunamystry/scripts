@@ -8,45 +8,13 @@ update date: 2 November 2014
 """
 import logging
 import random
+
 from word import *
 from utils import *
+from grid import *
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(message)s')
-
-def make_grid(x, y):
-    '''
-        input: size of the grid
-        returns: a list of strings representing the row of the grid
-    '''
-    bg = []
-    alphabet = "__________________________"
-    for r in range(1, y + 1):
-        row = []
-        for c in range(1, x + 1):
-            aindex = int(random.uniform(0, 26))
-            row.append(alphabet[aindex])
-        bg.append(row)
-    return bg
-
-
-def place(word, grid):
-    '''
-        tries to place the word on position x and y
-    '''
-    for i, point in enumerate(word.points):
-        grid[point.row][point.col] = word.text[i]
-
-
-def check_intersection(first, second):
-    '''
-        Check if two words intersect
-    '''
-    for p1 in first.points:
-        for p2 in second.points:
-            if p1 == p2:
-                return True
-
 
 def randomly_place(words, grid):
     '''
@@ -86,12 +54,11 @@ def randomly_place(words, grid):
 
 
 if __name__ == '__main__':
-    grid = make_grid(10, 10)
+    grid = Grid(10, 10)
     # randomly_place(["word", "igama", "leonard", "python"], grid)
-    python = Word("python", "NORTHEAST", Point(5, 2), grid)
-    leonard = Word("leonard", "NORTHWEST", Point(6, 7), grid)
-    place(python, grid)
-    place(leonard, grid)
-    print(check_intersection(python, leonard))
-    for row in grid:
-        logging.info(" ".join(row))
+    python = Word("python", "NORTHEAST", Point(5, 2), grid.grid)
+    leonard = Word("leonard", "NORTHWEST", Point(6, 7), grid.grid)
+    grid.place(python)
+    grid.place(leonard)
+    print(grid)
+    # print(check_intersection(python, leonard))
