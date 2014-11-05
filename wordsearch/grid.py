@@ -14,6 +14,7 @@ class Grid():
     def __init__(self, rows, cols):
         self.rows = rows
         self.cols = cols
+        self.words = []
         self.grid = self._init_grid(rows, cols)
 
     def place(self, word):
@@ -22,6 +23,7 @@ class Grid():
         '''
         for i, point in enumerate(word.points):
             self.grid[point.row][point.col] = word.text[i]
+        self.words.append(word)
 
     def _init_grid(self, y, x):
         '''
@@ -55,4 +57,4 @@ class Grid():
         for row in self.grid:
             grid_str += " ".join(row)
             grid_str += "\n"
-        return grid_str
+        return grid_str[:-1]

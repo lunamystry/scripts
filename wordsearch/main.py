@@ -61,4 +61,4 @@ if __name__ == '__main__':
     grid.place(python)
     grid.place(leonard)
     print(grid)
-    # print(check_intersection(python, leonard))
+    print(grid._check_intersection(python, leonard))
