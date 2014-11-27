@@ -61,5 +61,6 @@ if __name__ == '__main__':
     grid.place(python)
     grid.place(leonard)
     print(grid)
-    print(grid._check_intersection(python, leonard))
+    print(grid._check_collision(python, leonard))
+    print(grid._boundaries(leonard))
     print(grid.words)
