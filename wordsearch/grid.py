@@ -7,7 +7,7 @@ update date: 2 November 2014
 
 """
 import random
-from utils import *
+from collections import namedtuple
 
 
 class Grid():
@@ -40,14 +40,39 @@ class Grid():
             bg.append(row)
         return bg
 
-    def _check_intersection(self, first, second):
+    def _check_collision(self, first, second):
         '''
-            Check if two words intersect
+            Check if two words collide and cannot intersect
         '''
-        for p1 in first.points:
-            for p2 in second.points:
-                if p1 == p2:
+        for i, p1 in enumerate(first.points):
+            for j, p2 in enumerate(second.points):
+                if p1 == p2 and first.text[i] != second.text[j]:
                     return True
+
+    def _boundaries(self, word):
+        text = word.text
+        Bound = namedtuple('Bound', 'dir min_y max_y min_x max_x')
+        bounds = [
+                Bound("EAST",
+                    0, len(self.grid), 0, len(self.grid[0]) - (len(text) - 1)),
+                Bound("WEST",
+                    0, len(self.grid), len(text) - 1, len(self.grid[0])),
+                Bound("SOUTH",
+                    0, len(self.grid) - (len(text) - 1), 0, len(self.grid[0])),
+                Bound("NORTH",
+                    len(text) - 1, len(self.grid), 0, len(self.grid[0])),
+                Bound("SOUTHEAST",
+                    0, len(self.grid) - (len(text) - 1), 0, len(self.grid[0]) - (len(text) - 1)),
+                Bound("NORTHWEST",
+                    len(text) - 1, len(self.grid), len(text) - 1, len(self.grid[0])),
+                Bound("SOUTHWEST",
+                    0, len(self.grid) - (len(text) - 1), len(text) - 1, len(self.grid[-1])),
+                Bound("NORTHEAST",
+                    len(text) - 1, len(self.grid), 0, len(self.grid[0]) - (len(text) - 1))]
+        return bounds
+
+    def _possible_points(word):
+        pass
 
     def __str__(self):
         '''
