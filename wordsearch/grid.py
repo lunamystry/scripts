@@ -48,6 +48,7 @@ class Grid():
             for j, p2 in enumerate(second.points):
                 if p1 == p2 and first.text[i] != second.text[j]:
                     return True
+        return False
 
     def _boundaries(self, word):
         text = word.text
@@ -62,13 +63,17 @@ class Grid():
                 Bound("NORTH",
                     len(text) - 1, len(self.grid), 0, len(self.grid[0])),
                 Bound("SOUTHEAST",
-                    0, len(self.grid) - (len(text) - 1), 0, len(self.grid[0]) - (len(text) - 1)),
+                    0, len(self.grid) - (len(text) - 1), 0,
+                    len(self.grid[0]) - (len(text) - 1)),
                 Bound("NORTHWEST",
-                    len(text) - 1, len(self.grid), len(text) - 1, len(self.grid[0])),
+                    len(text) - 1, len(self.grid), len(text) - 1,
+                    len(self.grid[0])),
                 Bound("SOUTHWEST",
-                    0, len(self.grid) - (len(text) - 1), len(text) - 1, len(self.grid[-1])),
+                    0, len(self.grid) - (len(text) - 1), len(text) - 1,
+                    len(self.grid[-1])),
                 Bound("NORTHEAST",
-                    len(text) - 1, len(self.grid), 0, len(self.grid[0]) - (len(text) - 1))]
+                    len(text) - 1, len(self.grid), 0,
+                    len(self.grid[0]) - (len(text) - 1))]
         return bounds
 
     def _possible_points(word):
