@@ -7,6 +7,7 @@ update date: 2 November 2014
 
 """
 import random
+from utils import *
 from collections import namedtuple
 
 
@@ -52,32 +53,47 @@ class Grid():
 
     def _boundaries(self, word):
         text = word.text
-        Bound = namedtuple('Bound', 'dir min_y max_y min_x max_x')
-        bounds = [
-                Bound("EAST",
-                    0, len(self.grid), 0, len(self.grid[0]) - (len(text) - 1)),
-                Bound("WEST",
-                    0, len(self.grid), len(text) - 1, len(self.grid[0])),
-                Bound("SOUTH",
-                    0, len(self.grid) - (len(text) - 1), 0, len(self.grid[0])),
-                Bound("NORTH",
-                    len(text) - 1, len(self.grid), 0, len(self.grid[0])),
-                Bound("SOUTHEAST",
-                    0, len(self.grid) - (len(text) - 1), 0,
-                    len(self.grid[0]) - (len(text) - 1)),
-                Bound("NORTHWEST",
-                    len(text) - 1, len(self.grid), len(text) - 1,
-                    len(self.grid[0])),
-                Bound("SOUTHWEST",
-                    0, len(self.grid) - (len(text) - 1), len(text) - 1,
-                    len(self.grid[-1])),
-                Bound("NORTHEAST",
-                    len(text) - 1, len(self.grid), 0,
-                    len(self.grid[0]) - (len(text) - 1))]
-        return bounds
+        dir = word.direction
 
-    def _possible_points(word):
-        pass
+        Bound = namedtuple('Bound', 'dir min_y max_y min_x max_x')
+        if dir == "EAST":
+            return Bound("EAST",
+                    0, len(self.grid), 0, len(self.grid[0]) - (len(text) - 1))
+        elif dir == "WEST":
+            return Bound("WEST",
+                    0, len(self.grid), len(text) - 1, len(self.grid[0]))
+        elif dir == "SOUTH":
+            return Bound("SOUTH",
+                    0, len(self.grid) - (len(text) - 1), 0, len(self.grid[0]))
+        elif dir == "NORTH":
+            return Bound("NORTH",
+                    len(text) - 1, len(self.grid), 0, len(self.grid[0]))
+        elif dir == "SOUTHEAST":
+            return Bound("SOUTHEAST",
+                    0, len(self.grid) - (len(text) - 1), 0,
+                    len(self.grid[0]) - (len(text) - 1))
+        elif dir == "NORTHWEST":
+            return Bound("NORTHWEST",
+                    len(text) - 1, len(self.grid), len(text) - 1,
+                    len(self.grid[0]))
+        elif dir == "SOUTHWEST":
+            return Bound("SOUTHWEST",
+                    0, len(self.grid) - (len(text) - 1), len(text) - 1,
+                    len(self.grid[-1]))
+        elif dir == "NORTHEAST":
+            return Bound("NORTHEAST",
+                    len(text) - 1, len(self.grid), 0,
+                    len(self.grid[0]) - (len(text) - 1))
+
+    def _possible_points(self, word):
+        bounds = self._boundaries(word)
+        points = []
+        print(bounds)
+        for row in range(bounds.min_y, bounds.max_y + 1):
+            for col in range(bounds.min_x, bounds.max_x + 1):
+                point = Point(row, col)
+                points.append(point)
+        return points
 
     def __str__(self):
         '''
