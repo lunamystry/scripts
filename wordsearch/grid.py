@@ -89,8 +89,8 @@ class Grid():
         bounds = self._boundaries(word)
         points = []
         print(bounds)
-        for row in range(bounds.min_y, bounds.max_y + 1):
-            for col in range(bounds.min_x, bounds.max_x + 1):
+        for row in range(bounds.min_y, bounds.max_y):
+            for col in range(bounds.min_x, bounds.max_x):
                 point = Point(row, col)
                 points.append(point)
         return points
