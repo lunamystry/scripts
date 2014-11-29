@@ -7,6 +7,7 @@ update date: 5 November 2014
 
 """
 from utils import *
+import logging
 
 
 class Word():
@@ -30,7 +31,7 @@ class Word():
             col += col_incr
             if (row < 0 or col < 0 or row > grid.rows or col > grid.cols):
                 logging.debug("row:{0} col:{1}".format(row, col))
-                raise IndexError(self.text + " is not completely inside grid")
+                raise IndexError("'" +self.text + "' is not completely inside grid")
             points.append(Point(row, col))
         return points
 
