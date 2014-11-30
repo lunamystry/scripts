@@ -13,6 +13,21 @@ logging.basicConfig(level=logging.DEBUG,
                     format='%(message)s')
 
 if __name__ == '__main__':
-    grid = Grid(6, 7)
-    grid.place(*['l-*9eonard988..','mandla'])
+    grid = Grid(20, 20)
+    grid.place(*['leonard',
+        'mandla',
+        'phoebie',
+        'book',
+        'classic',
+        'homecoming',
+        'breast',
+        'sibling',
+        'war',
+        'sand',
+        'diary',
+        'door',
+        'cocky',
+        'perfect',
+        'nothing',
+        'coven'])
     print(grid)
