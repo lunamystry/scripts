@@ -7,17 +7,11 @@ update date: 5 November 2014
 
 """
 from utils import *
-import re
-import string
 import logging
 
 
 class Word():
     def __init__(self, text, direction):
-        # The word must be stripped of hyphens and numbers
-        # The word must be lowercase
-        self.text = re.sub("["+string.punctuation+"\d]", "", text.lower(), 0, 0)
-        print(self.text)
         self.direction = direction
 
     # @property
