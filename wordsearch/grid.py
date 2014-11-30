@@ -8,7 +8,7 @@ update date: 2 November 2014
 """
 import random
 from copy import copy
-from utils import *
+from point import *
 from word import *
 from collections import namedtuple
 

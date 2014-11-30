@@ -6,7 +6,7 @@ creation date: 17 July 2014
 update date: 5 November 2014
 
 """
-from utils import *
+from point import *
 import re
 import string
 import logging
