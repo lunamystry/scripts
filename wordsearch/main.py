@@ -31,3 +31,4 @@ if __name__ == '__main__':
         'nothing',
         'coven'])
     print(grid)
+    print(grid.words)
