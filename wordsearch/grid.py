@@ -49,9 +49,9 @@ class Grid():
             possible_starts = self._possible_starts(word)
             if possible_starts:
                 word.start = possible_starts[sindex]
-                # for i, point in enumerate(word.points):
-                #     self.grid[point.row][point.col] = word.text[i]
-        #self.words.append(copy(word))
+                for i, point in enumerate(word.points):
+                    self.grid[point.row][point.col] = word.text[i]
+                    self.words.append(copy(word))
 
     def _possible_starts(self, word):
         bounds = self._boundaries(word)
