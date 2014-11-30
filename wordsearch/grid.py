@@ -87,12 +87,17 @@ class Grid():
 
     def _possible_points(self, word):
         bounds = self._boundaries(word)
+        within_bounds = []
         points = []
         print(bounds)
         for row in range(bounds.min_y, bounds.max_y):
             for col in range(bounds.min_x, bounds.max_x):
                 point = Point(row, col)
-                points.append(point)
+                within_bounds.append(point)
+        for point in within_bounds:
+            word.start = point
+            for word in self.words:
+                print(word)
         return points
 
     def __str__(self):
