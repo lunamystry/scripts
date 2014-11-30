@@ -15,10 +15,20 @@ class Word():
         # The word must be stripped of hyphens and numbers
         # x and y must be on the grid and the length must be less than grid
         # The word must be lowercase
+        self.grid = grid
         self.text = text
         self.direction = direction
-        self.start = start
-        self.points = self._calculate_points(grid);
+        self._start = start
+        self.points = self._calculate_points(self.grid)
+
+    @property
+    def start(self):
+        return self._start
+
+    @start.setter
+    def start(self, value):
+        self._start = value
+        self.points = self._calculate_points(self.grid)
 
     def _calculate_points(self, grid):
         row_incr, col_incr = self._increments()
