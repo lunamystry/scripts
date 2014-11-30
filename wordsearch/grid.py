@@ -20,13 +20,15 @@ class Grid():
         self.words = []
         self.grid = self._init_grid(rows, cols)
 
-    def place(self, word):
+    def place(self, *args):
         '''
             tries to place the word on position x and y
         '''
-        for i, point in enumerate(word.points):
-            self.grid[point.row][point.col] = word.text[i]
-        self.words.append(copy(word))
+        for arg in args:
+            word = Word(arg, "DIR")
+        #for i, point in enumerate(word.points):
+        #    self.grid[point.row][point.col] = word.text[i]
+        #self.words.append(copy(word))
 
     def _init_grid(self, y, x):
         '''
