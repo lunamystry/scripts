@@ -41,13 +41,13 @@ class Grid():
         '''
         directions = ['EAST', 'WEST', 'SOUTH', 'NORTH', 'NORTHEAST',
                 'NORTHWEST', 'SOUTHEAST', 'SOUTHWEST']
-        dindex = 0
-        sindex = 0
 
         for arg in args:
+            dindex = int(random.uniform(0, len(directions)))
             word = Word(arg, directions[dindex], self)
             possible_starts = self._possible_starts(word)
             if possible_starts:
+                sindex = int(random.uniform(0, len(possible_starts)))
                 word.start = possible_starts[sindex]
                 for i, point in enumerate(word.points):
                     self.grid[point.row][point.col] = word.text[i]
