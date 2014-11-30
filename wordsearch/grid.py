@@ -9,8 +9,7 @@ update date: 2 November 2014
 import random
 from copy import copy
 from utils import *
-import re
-import string
+from word import *
 from collections import namedtuple
 
 
@@ -43,16 +42,19 @@ class Grid():
         directions = ['EAST', 'WEST', 'SOUTH', 'NORTH', 'NORTHEAST',
                 'NORTHWEST', 'SOUTHEAST', 'SOUTHWEST']
         dindex = 0
+        sindex = 0
 
         for arg in args:
-            word = re.sub("["+string.punctuation+"\d]", "", arg.lower(), 0, 0)
-            possible_starts = self._possible_starts(word, directions[dindex])
-            # for i, point in enumerate(word.points):
-            #     self.grid[point.row][point.col] = word.text[i]
+            word = Word(arg, directions[dindex], self)
+            possible_starts = self._possible_starts(word)
+            if possible_starts:
+                word.start = possible_starts[sindex]
+                # for i, point in enumerate(word.points):
+                #     self.grid[point.row][point.col] = word.text[i]
         #self.words.append(copy(word))
 
-    def _possible_starts(self, word, direction):
-        bounds = self._boundaries(word, direction)
+    def _possible_starts(self, word):
+        bounds = self._boundaries(word)
         within_bounds = []
         points = []
         collision_points = []
@@ -67,38 +69,38 @@ class Grid():
                 if self._check_collision(word, grid_word):
                     collision_points.append(point)
         # filter points collision points
-        # for point in within_bounds:
-        #     if point not in collision_points:
-        #         points.append(point)
+        for point in within_bounds:
+            if point not in collision_points:
+                points.append(point)
         return points
 
-    def _boundaries(self, word, direction):
+    def _boundaries(self, word):
         Bound = namedtuple('Bound', 'direction min_y max_y min_x max_x')
-        if direction == "EAST":
+        if word.direction == "EAST":
             return Bound("EAST",
                     0, len(self.grid), 0, len(self.grid[0]) - (len(word) - 1))
-        elif direction == "WEST":
+        elif word.direction == "WEST":
             return Bound("WEST",
                     0, len(self.grid), len(word) - 1, len(self.grid[0]))
-        elif direction == "SOUTH":
+        elif word.direction == "SOUTH":
             return Bound("SOUTH",
                     0, len(self.grid) - (len(word) - 1), 0, len(self.grid[0]))
-        elif direction == "NORTH":
+        elif word.direction == "NORTH":
             return Bound("NORTH",
                     len(word) - 1, len(self.grid), 0, len(self.grid[0]))
-        elif direction == "SOUTHEAST":
+        elif word.direction == "SOUTHEAST":
             return Bound("SOUTHEAST",
                     0, len(self.grid) - (len(word) - 1), 0,
                     len(self.grid[0]) - (len(word) - 1))
-        elif direction == "NORTHWEST":
+        elif word.direction == "NORTHWEST":
             return Bound("NORTHWEST",
                     len(word) - 1, len(self.grid), len(word) - 1,
                     len(self.grid[0]))
-        elif direction == "SOUTHWEST":
+        elif word.direction == "SOUTHWEST":
             return Bound("SOUTHWEST",
                     0, len(self.grid) - (len(word) - 1), len(word) - 1,
                     len(self.grid[-1]))
-        elif direction == "NORTHEAST":
+        elif word.direction == "NORTHEAST":
             return Bound("NORTHEAST",
                     len(word) - 1, len(self.grid), 0,
                     len(self.grid[0]) - (len(word) - 1))
