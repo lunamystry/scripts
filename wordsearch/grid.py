@@ -26,7 +26,7 @@ class Grid():
             returns: a list of strings representing the row of the grid
         '''
         bg = []
-        alphabet = "__________________________"
+        alphabet = "abcdefghijklmnopqrstuvwxyz"
         for r in range(1, y + 1):
             row = []
             for c in range(1, x + 1):
@@ -51,7 +51,8 @@ class Grid():
                 word.start = possible_starts[sindex]
                 for i, point in enumerate(word.points):
                     self.grid[point.row][point.col] = word.text[i]
-                    self.words.append(copy(word))
+                    if word not in self.words:
+                        self.words.append(word)
 
     def _possible_starts(self, word):
         bounds = self._boundaries(word)
