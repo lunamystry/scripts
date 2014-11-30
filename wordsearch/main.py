@@ -56,9 +56,16 @@ def randomly_place(words, grid):
 if __name__ == '__main__':
     grid = Grid(6, 6)
     python = Word("python", "SOUTH", Point(0, 0), grid)
-    leonard = Word("leonar", "SOUTH", Point(0, 0), grid)
-    grid.place(python)
-    print(grid._possible_points(leonard))
+    leonard = Word("leonar", "EAST", Point(0, 0), grid)
+    mandla = Word("mandla", "SOUTH", Point(0, 4), grid)
+    # grid.place(python)
+    grid.place(mandla)
+    for point in grid._possible_points(leonard):
+        grid.place(Word("leonar", "EAST", point, grid))
+        print(point)
+    print()
+    print(grid)
+    print()
     # for point in grid._possible_points(python):
     #     print(point)
     # randomly_place(["word", "igama", "leonard", "python"], grid)
