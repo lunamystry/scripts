@@ -7,7 +7,9 @@ update date: 2 November 2014
 
 """
 import random
+from copy import copy
 from utils import *
+from word import *
 from collections import namedtuple
 
 
@@ -24,7 +26,7 @@ class Grid():
         '''
         for i, point in enumerate(word.points):
             self.grid[point.row][point.col] = word.text[i]
-        self.words.append(word)
+        self.words.append(copy(word))
 
     def _init_grid(self, y, x):
         '''
@@ -89,15 +91,16 @@ class Grid():
         bounds = self._boundaries(word)
         within_bounds = []
         points = []
-        print(bounds)
         for row in range(bounds.min_y, bounds.max_y):
             for col in range(bounds.min_x, bounds.max_x):
                 point = Point(row, col)
                 within_bounds.append(point)
         for point in within_bounds:
             word.start = point
-            for word in self.words:
-                print(word)
+            for grid_word in self.words:
+                print(str(grid_word.start) + " & " + str(word.start))
+                if self._check_collision(word, grid_word):
+                    print(word.start)
         return points
 
     def __str__(self):
