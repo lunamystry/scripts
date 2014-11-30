@@ -91,18 +91,21 @@ class Grid():
         bounds = self._boundaries(word)
         within_bounds = []
         points = []
+        collision_points = []
         for row in range(bounds.min_y, bounds.max_y):
             for col in range(bounds.min_x, bounds.max_x):
                 point = Point(row, col)
                 within_bounds.append(point)
+        # Get collision points,
         for point in within_bounds:
             word.start = point
             for grid_word in self.words:
-                print(str(grid_word.start) + " & " + str(word.start))
                 if self._check_collision(word, grid_word):
-                    print("Collision: " + str(word.start))
-                else:
-                    points.append(point)
+                    collision_points.append(point)
+        # filter points collision points
+        for point in within_bounds:
+            if point not in collision_points:
+                points.append(point)
         return points
 
     def __str__(self):
