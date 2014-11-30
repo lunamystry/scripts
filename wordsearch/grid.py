@@ -100,7 +100,9 @@ class Grid():
             for grid_word in self.words:
                 print(str(grid_word.start) + " & " + str(word.start))
                 if self._check_collision(word, grid_word):
-                    print(word.start)
+                    print("Collision: " + str(word.start))
+                else:
+                    points.append(point)
         return points
 
     def __str__(self):
