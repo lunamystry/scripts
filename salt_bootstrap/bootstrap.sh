@@ -62,12 +62,12 @@ function suse
     done < $proxy_config_template
     echo -e "\t wrote proxy config to: $proxy_config"
 
-    # echo -e "\t add python repo..."
-    # sudo zypper addrepo http://download.opensuse.org/repositories/devel:/languages:/python/SLE_11_SP3/devel:languages:python.repo
-    # echo -e "\t add git repo..."
-    # sudo zypper addrepo http://download.opensuse.org/repositories/devel:/tools:/scm/SLE_11_SP3/devel:tools:scm.repo
-    # echo -e "\t add perl-Error repo..."
-    # sudo zypper addrepo http://download.opensuse.org/repositories/devel:/languages:/perl/SLE_11_SP3/devel:languages:perl.repo
+    echo -e "\t add python repo..."
+    sudo zypper addrepo http://download.opensuse.org/repositories/devel:/languages:/python/SLE_11_SP3/devel:languages:python.repo
+    echo -e "\t add git repo..."
+    sudo zypper addrepo http://download.opensuse.org/repositories/devel:/tools:/scm/SLE_11_SP3/devel:tools:scm.repo
+    echo -e "\t add perl-Error repo..."
+    sudo zypper addrepo http://download.opensuse.org/repositories/devel:/languages:/perl/SLE_11_SP3/devel:languages:perl.repo
 
     if [ "$1" = "master" ]; then
         echo ""
@@ -109,9 +109,9 @@ function suse
         echo -e "\t removed $minion_config_intermediate"
         rm $minion_config_intermediate
 
-        # sudo zypper install salt-minion
-        # sudo chkconfig salt-minion on
-        # sudo rcsalt-master start
+        sudo zypper install salt-minion
+        sudo chkconfig salt-minion on
+        sudo rcsalt-master start
     else
         usage
     fi
