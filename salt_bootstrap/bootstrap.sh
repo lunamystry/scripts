@@ -48,7 +48,7 @@ function suse
     echo "Boostrapping on openSUSE/SLES..."
     http="http:\/\/" # I will clean up input properly later... maybe
     default_proxy="146.141.119.192:3128"
-    echo -n "proxy string for /etc/sysconfig/proxy [$default_proxy]: "
+    echo -n -e "\t proxy string for /etc/sysconfig/proxy [$default_proxy]: "
     read proxy
     if [ "$proxy" == "" ]; then
         proxy=$http$default_proxy
@@ -60,25 +60,27 @@ function suse
       echo $LINE |
       sed "s/{{ proxy }}/"$proxy"/g" >> $proxy_config
     done < $proxy_config_template
-    echo "wrote proxy config to: $proxy_config"
+    echo -e "\t wrote proxy config to: $proxy_config"
 
-    echo "add python repo..."
-    sudo zypper addrepo http://download.opensuse.org/repositories/devel:/languages:/python/SLE_11_SP3/devel:languages:python.repo
-    echo "add git repo..."
-    sudo zypper addrepo http://download.opensuse.org/repositories/devel:/tools:/scm/SLE_11_SP3/devel:tools:scm.repo
-    echo "add perl-Error repo..."
-    sudo zypper addrepo http://download.opensuse.org/repositories/devel:/languages:/perl/SLE_11_SP3/devel:languages:perl.repo
+    # echo -e "\t add python repo..."
+    # sudo zypper addrepo http://download.opensuse.org/repositories/devel:/languages:/python/SLE_11_SP3/devel:languages:python.repo
+    # echo -e "\t add git repo..."
+    # sudo zypper addrepo http://download.opensuse.org/repositories/devel:/tools:/scm/SLE_11_SP3/devel:tools:scm.repo
+    # echo -e "\t add perl-Error repo..."
+    # sudo zypper addrepo http://download.opensuse.org/repositories/devel:/languages:/perl/SLE_11_SP3/devel:languages:perl.repo
 
     if [ "$1" = "master" ]; then
-        echo "installing salt-master..."
+        echo ""
+        echo -e "\t installing salt-master..."
         sudo zypper install salt-master
         sudo chkconfig salt-master on
         sudo rcsalt-master start
     elif [ "$1" = "minion" ]; then
-        echo "installing salt-minion..."
+        echo ""
+        echo -e "\t installing salt-minion..."
         default_id=""
         default_master="localhost"
-        echo -n "minion id [$default_id]: "
+        echo -n -e "\t minion id [$default_id]: "
         read id
         if [ "$id" == "" ]; then
             id=$default_id
@@ -91,9 +93,9 @@ function suse
             echo $LINE |
             sed "s/{{ id }}/"$id"/g" >> $minion_config_intermediate
         done < $minion_config_template
-        echo "wrote minion config to: $minion_config_intermediate"
+        echo -e "\t wrote minion config to: $minion_config_intermediate"
 
-        echo -n "minion master [$default_master]: "
+        echo -n -e "\t minion master [$default_master]: "
         read master
         if [ "$master" == "" ]; then
             master=$default_master
@@ -103,16 +105,19 @@ function suse
             echo $LINE |
             sed "s/{{ master }}/"$master"/g" >> $minion_config
         done < $minion_config_intermediate
-        echo "wrote minion config to: $minion_config"
-        echo "removed $minion_config_intermediate"
+        echo -e "\t wrote minion config to: $minion_config"
+        echo -e "\t removed $minion_config_intermediate"
         rm $minion_config_intermediate
 
-        sudo zypper install salt-minion
-        sudo chkconfig salt-minion on
-        sudo rcsalt-master start
+        # sudo zypper install salt-minion
+        # sudo chkconfig salt-minion on
+        # sudo rcsalt-master start
     else
         usage
     fi
+
+    echo ""
+    echo "Done!"
 }
 
 if [ "$1" = "--help" ]; then
