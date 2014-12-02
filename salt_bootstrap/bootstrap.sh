@@ -62,19 +62,54 @@ function suse
     done < $proxy_config_template
     echo "wrote proxy config to: $proxy_config"
 
-    echo "add python repo..."
-    zypper addrepo http://download.opensuse.org/repositories/devel:/languages:/python/SLE_11_SP3/devel:languages:python.repo
-    echo "add git repo..."
-    zypper addrepo http://download.opensuse.org/repositories/devel:/tools:/scm/SLE_11_SP3/devel:tools:scm.repo
-    echo "add perl-Error repo..."
-    zypper addrepo http://download.opensuse.org/repositories/devel:/languages:/perl/SLE_11_SP3/devel:languages:perl.repo
+    # echo "add python repo..."
+    # sudo zypper addrepo http://download.opensuse.org/repositories/devel:/languages:/python/SLE_11_SP3/devel:languages:python.repo
+    # echo "add git repo..."
+    # sudo zypper addrepo http://download.opensuse.org/repositories/devel:/tools:/scm/SLE_11_SP3/devel:tools:scm.repo
+    # echo "add perl-Error repo..."
+    # sudo zypper addrepo http://download.opensuse.org/repositories/devel:/languages:/perl/SLE_11_SP3/devel:languages:perl.repo
 
     if [ "$1" = "master" ]; then
         echo "installing salt-master..."
-        zypper install salt-master
+        sudo zypper install salt-master
+        sudo chkconfig salt-master on
+        sudo rcsalt-master start
     elif [ "$1" = "minion" ]; then
         echo "installing salt-minion..."
-        zypper install salt-minion
+        default_id=""
+        default_master="localhost"
+        echo -n "minion id [$default_id]: "
+        read id
+        if [ "$id" == "" ]; then
+            id=$default_id
+        fi
+
+        minion_config_template='minion.template'
+        minion_config_intermediate='minion_intermediate.file'
+        minion_config='minion_output.file'
+        while read LINE; do
+            echo $LINE |
+            sed "s/{{ id }}/"$id"/g" >> $minion_config_intermediate
+        done < $minion_config_template
+        echo "wrote minion config to: $minion_config_intermediate"
+
+        echo -n "minion master [$default_master]: "
+        read master
+        if [ "$master" == "" ]; then
+            master=$default_master
+        fi
+
+        while read LINE; do
+            echo $LINE |
+            sed "s/{{ master }}/"$master"/g" >> $minion_config
+        done < $minion_config_intermediate
+        echo "wrote minion config to: $minion_config"
+        echo "removed $minion_config_intermediate"
+        rm $minion_config_intermediate
+
+        # sudo zypper install salt-minion
+        # sudo chkconfig salt-minion on
+        # sudo rcsalt-master start
     else
         usage
     fi
