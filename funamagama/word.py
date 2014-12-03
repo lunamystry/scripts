@@ -6,13 +6,16 @@ creation date: 17 July 2014
 update date: 5 November 2014
 
 """
+from __future__ import print_function
+from __future__ import unicode_literals
+
 from point import *
 import re
 import string
 import logging
 
 
-class Word():
+class Word(object):
     def __init__(self, text, direction, grid):
         self.text = re.sub("["+string.punctuation+"\d]", "", text.lower(), 0, 0)
         self.direction = direction
