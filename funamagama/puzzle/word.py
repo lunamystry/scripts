@@ -9,7 +9,7 @@ update date: 5 November 2014
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from point import *
+from .point import *
 import re
 import string
 import logging

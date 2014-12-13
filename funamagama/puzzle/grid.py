@@ -11,9 +11,9 @@ from __future__ import unicode_literals
 
 import random
 from copy import copy
-from point import *
-from word import *
 from collections import namedtuple
+from .point import *
+from .word import *
 
 
 class Grid():

@@ -10,7 +10,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import logging
-from grid import *
+from .grid import *
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(message)s')
