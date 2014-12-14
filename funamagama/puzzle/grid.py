@@ -21,7 +21,7 @@ class Grid():
         self.rows = rows
         self.cols = cols
         self.words = []
-        self.grid = self._init_grid(rows, cols)
+        self._grid = self._init_grid(rows, cols)
 
     def _init_grid(self, y, x):
         '''
@@ -48,17 +48,17 @@ class Grid():
         for arg in args:
             dindex = int(random.uniform(0, len(directions)))
             word = Word(arg, directions[dindex], self)
-            possible_starts = self._possible_starts(word)
+            possible_starts = self.possible_starts(word)
             if possible_starts:
                 sindex = int(random.uniform(0, len(possible_starts)))
                 word.start = possible_starts[sindex]
                 for i, point in enumerate(word.points):
-                    self.grid[point.row][point.col] = word.text[i]
+                    self._grid[point.row][point.col] = word.text[i]
                     if word not in self.words:
                         self.words.append(word)
 
-    def _possible_starts(self, word):
-        bounds = self._boundaries(word)
+    def possible_starts(self, word):
+        bounds = self.boundaries(word)
         within_bounds = []
         points = []
         collision_points = []
@@ -70,7 +70,7 @@ class Grid():
         for point in within_bounds:
             word.start = point
             for grid_word in self.words:
-                if self._check_collision(word, grid_word):
+                if self.collision(word, grid_word):
                     collision_points.append(point)
         # filter points collision points
         for point in within_bounds:
@@ -78,38 +78,38 @@ class Grid():
                 points.append(point)
         return points
 
-    def _boundaries(self, word):
+    def boundaries(self, word):
         Bound = namedtuple('Bound', 'direction min_y max_y min_x max_x')
         if word.direction == "EAST":
             return Bound("EAST",
-                    0, len(self.grid), 0, len(self.grid[0]) - (len(word) - 1))
+                    0, len(self._grid), 0, len(self._grid[0]) - (len(word) - 1))
         elif word.direction == "WEST":
             return Bound("WEST",
-                    0, len(self.grid), len(word) - 1, len(self.grid[0]))
+                    0, len(self._grid), len(word) - 1, len(self._grid[0]))
         elif word.direction == "SOUTH":
             return Bound("SOUTH",
-                    0, len(self.grid) - (len(word) - 1), 0, len(self.grid[0]))
+                    0, len(self._grid) - (len(word) - 1), 0, len(self._grid[0]))
         elif word.direction == "NORTH":
             return Bound("NORTH",
-                    len(word) - 1, len(self.grid), 0, len(self.grid[0]))
+                    len(word) - 1, len(self._grid), 0, len(self._grid[0]))
         elif word.direction == "SOUTHEAST":
             return Bound("SOUTHEAST",
-                    0, len(self.grid) - (len(word) - 1), 0,
-                    len(self.grid[0]) - (len(word) - 1))
+                    0, len(self._grid) - (len(word) - 1), 0,
+                    len(self._grid[0]) - (len(word) - 1))
         elif word.direction == "NORTHWEST":
             return Bound("NORTHWEST",
-                    len(word) - 1, len(self.grid), len(word) - 1,
-                    len(self.grid[0]))
+                    len(word) - 1, len(self._grid), len(word) - 1,
+                    len(self._grid[0]))
         elif word.direction == "SOUTHWEST":
             return Bound("SOUTHWEST",
-                    0, len(self.grid) - (len(word) - 1), len(word) - 1,
-                    len(self.grid[-1]))
+                    0, len(self._grid) - (len(word) - 1), len(word) - 1,
+                    len(self._grid[-1]))
         elif word.direction == "NORTHEAST":
             return Bound("NORTHEAST",
-                    len(word) - 1, len(self.grid), 0,
-                    len(self.grid[0]) - (len(word) - 1))
+                    len(word) - 1, len(self._grid), 0,
+                    len(self._grid[0]) - (len(word) - 1))
 
-    def _check_collision(self, first, second):
+    def collision(self, first, second):
         '''
             Check if two words collide and cannot intersect
         '''
@@ -119,13 +119,12 @@ class Grid():
                     return True
         return False
 
-
     def __str__(self):
         '''
             join up the grid so it can be shown
         '''
         grid_str = ""
-        for row in self.grid:
+        for row in self._grid:
             grid_str += " ".join(row)
             grid_str += "\n"
         return grid_str[:-1]
