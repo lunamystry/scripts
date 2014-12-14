@@ -18,6 +18,9 @@ from .word import *
 
 class Grid():
     def __init__(self, rows, cols):
+        '''
+            create a grid with the given dimensions, and empty list of words
+        '''
         self.rows = rows
         self.cols = cols
         self.words = []
@@ -40,7 +43,8 @@ class Grid():
 
     def place(self, *args):
         '''
-            tries to place the word on position x and y
+            Tries to place the given string(s) on the grid in random directions
+            and starting positions
         '''
         directions = ['EAST', 'WEST', 'SOUTH', 'NORTH', 'NORTHEAST',
                 'NORTHWEST', 'SOUTHEAST', 'SOUTHWEST']
@@ -58,6 +62,10 @@ class Grid():
                         self.words.append(word)
 
     def possible_starts(self, word):
+        '''
+            find all the possible starts for the given word on the grid where
+            it will not have a collision but may have an intersection.
+        '''
         bounds = self.boundaries(word)
         within_bounds = []
         points = []
@@ -79,6 +87,9 @@ class Grid():
         return points
 
     def boundaries(self, word):
+        '''
+            Find all the positions which make sure the word is within the grid
+        '''
         Bound = namedtuple('Bound', 'direction min_y max_y min_x max_x')
         if word.direction == "EAST":
             return Bound("EAST",
