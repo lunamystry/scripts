@@ -3,7 +3,7 @@
 author: Leonard Mbuli <mail@mandla.me>
 
 creation date: 17 July 2014
-update date: 2 November 2014
+update date: 14 December 2014
 
 """
 from __future__ import print_function
@@ -93,34 +93,37 @@ class Grid():
             Find all the positions which make sure the word is within the grid
         '''
         Bound = namedtuple('Bound', 'direction min_y max_y min_x max_x')
-        if word.direction == "EAST":
-            return Bound("EAST",
-                    0, len(self._grid), 0, len(self._grid[0]) - (len(word) - 1))
-        elif word.direction == "WEST":
-            return Bound("WEST",
-                    0, len(self._grid), len(word) - 1, len(self._grid[0]))
-        elif word.direction == "SOUTH":
-            return Bound("SOUTH",
-                    0, len(self._grid) - (len(word) - 1), 0, len(self._grid[0]))
-        elif word.direction == "NORTH":
-            return Bound("NORTH",
-                    len(word) - 1, len(self._grid), 0, len(self._grid[0]))
-        elif word.direction == "SOUTHEAST":
-            return Bound("SOUTHEAST",
+        bounds = {
+                'EAST': 
+                Bound('EAST', 0, 
+                    len(self._grid), 0, len(self._grid[0]) - (len(word) - 1)),
+                'WEST':
+                Bound("WEST",
+                    0, len(self._grid), len(word) - 1, len(self._grid[0])),
+                'SOUTH':
+                Bound("SOUTH", 0, 
+                    len(self._grid) - (len(word) - 1), 0, len(self._grid[0])),
+                'NORTH':
+                Bound("NORTH",
+                    len(word) - 1, len(self._grid), 0, len(self._grid[0])),
+                "SOUTHEAST":
+                Bound("SOUTHEAST",
                     0, len(self._grid) - (len(word) - 1), 0,
-                    len(self._grid[0]) - (len(word) - 1))
-        elif word.direction == "NORTHWEST":
-            return Bound("NORTHWEST",
+                    len(self._grid[0]) - (len(word) - 1)),
+                "NORTHWEST":
+                Bound("NORTHWEST",
                     len(word) - 1, len(self._grid), len(word) - 1,
-                    len(self._grid[0]))
-        elif word.direction == "SOUTHWEST":
-            return Bound("SOUTHWEST",
+                    len(self._grid[0])),
+                "SOUTHWEST":
+                Bound("SOUTHWEST",
                     0, len(self._grid) - (len(word) - 1), len(word) - 1,
-                    len(self._grid[-1]))
-        elif word.direction == "NORTHEAST":
-            return Bound("NORTHEAST",
+                    len(self._grid[-1])),
+                "NORTHEAST":
+                Bound("NORTHEAST",
                     len(word) - 1, len(self._grid), 0,
                     len(self._grid[0]) - (len(word) - 1))
+                }
+        return bounds[word.direction]
 
     def collision(self, first, second):
         '''
