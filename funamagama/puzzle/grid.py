@@ -10,8 +10,10 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import random
+
 from copy import copy
 from collections import namedtuple
+
 from .point import *
 from .word import *
 
@@ -24,9 +26,9 @@ class Grid():
         self.rows = rows
         self.cols = cols
         self.words = []
-        self._grid = self._init_grid(rows, cols)
+        self._grid = self.init_grid(rows, cols)
 
-    def _init_grid(self, y, x):
+    def init_grid(self, y, x):
         '''
             input: size of the grid
             returns: a list of strings representing the row of the grid
