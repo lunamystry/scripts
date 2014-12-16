@@ -30,6 +30,23 @@ class Word(object):
         self._start = value
         self.points = self._calculate_points()
 
+
+    def collision(self, second):# {{{
+        '''
+            Check if two words collide and cannot intersect
+        '''
+        overlap = 0.0
+        for i, p1 in enumerate(self.points):
+            for j, p2 in enumerate(second.points):
+                if p1 == p2 and self.text[i] != second.text[j]:
+                    return True
+                elif self.text[i] == second.text[j]:
+                    overlap += 1.0
+                    if int(100*(overlap/min(len(self), len(second)))) > 30:
+                        return True
+        return False# }}}
+
+
     def _calculate_points(self):
         row_incr, col_incr = self._increments()
         points = []
