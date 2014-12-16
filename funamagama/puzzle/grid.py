@@ -14,21 +14,21 @@ import random
 from copy import copy
 from collections import namedtuple
 
-from .point import *
-from .word import *
+from .point import Point
+from .word import Word
 
 
 class Grid():
-    def __init__(self, rows, cols):
+    def __init__(self, rows, cols):# {{{
         '''
             create a grid with the given dimensions, and empty list of words
         '''
         self.rows = rows
         self.cols = cols
         self.words = []
-        self._grid = self.init_grid(rows, cols)
+        self._grid = self.init_grid(rows, cols)# }}}
 
-    def init_grid(self, y, x):
+    def init_grid(self, y, x):# {{{
         '''
             input: size of the grid
             returns: a list of strings representing the row of the grid
@@ -41,15 +41,16 @@ class Grid():
                 aindex = int(random.uniform(0, 26))
                 row.append(alphabet[aindex])
             bg.append(row)
-        return bg
+        return bg# }}}
 
-    def place(self, *args):
+    def place(self, *args):# {{{
         '''
             Tries to place the given string(s) on the grid in random directions
             and starting positions
         '''
         directions = ['EAST', 'WEST', 'SOUTH', 'NORTH', 'NORTHEAST',
                 'NORTHWEST', 'SOUTHEAST', 'SOUTHWEST']
+        not_placed = []
 
         for arg in args:
             dindex = int(random.uniform(0, len(directions)))
@@ -62,8 +63,12 @@ class Grid():
                     self._grid[point.row][point.col] = word.text[i]
                     if word not in self.words:
                         self.words.append(word)
+            else:
+                not_placed.append(arg)
 
-    def possible_starts(self, word):
+        return not_placed# }}}
+
+    def possible_starts(self, word):# {{{
         '''
             find all the possible starts for the given word on the grid where
             it will not have a collision but may have an intersection.
@@ -86,22 +91,22 @@ class Grid():
         for point in within_bounds:
             if point not in collision_points:
                 points.append(point)
-        return points
+        return points# }}}
 
-    def boundaries(self, word):
+    def boundaries(self, word):# {{{
         '''
             Find all the positions which make sure the word is within the grid
         '''
         Bound = namedtuple('Bound', 'direction min_y max_y min_x max_x')
         bounds = {
-                'EAST': 
-                Bound('EAST', 0, 
+                'EAST':
+                Bound('EAST', 0,
                     len(self._grid), 0, len(self._grid[0]) - (len(word) - 1)),
                 'WEST':
                 Bound("WEST",
                     0, len(self._grid), len(word) - 1, len(self._grid[0])),
                 'SOUTH':
-                Bound("SOUTH", 0, 
+                Bound("SOUTH", 0,
                     len(self._grid) - (len(word) - 1), 0, len(self._grid[0])),
                 'NORTH':
                 Bound("NORTH",
@@ -123,9 +128,9 @@ class Grid():
                     len(word) - 1, len(self._grid), 0,
                     len(self._grid[0]) - (len(word) - 1))
                 }
-        return bounds[word.direction]
+        return bounds[word.direction]# }}}
 
-    def collision(self, first, second):
+    def collision(self, first, second):# {{{
         '''
             Check if two words collide and cannot intersect
         '''
@@ -133,9 +138,9 @@ class Grid():
             for j, p2 in enumerate(second.points):
                 if p1 == p2 and first.text[i] != second.text[j]:
                     return True
-        return False
+        return False# }}}
 
-    def __str__(self):
+    def __str__(self):# {{{
         '''
             join up the grid so it can be shown
         '''
@@ -143,4 +148,4 @@ class Grid():
         for row in self._grid:
             grid_str += " ".join(row)
             grid_str += "\n"
-        return grid_str[:-1]
+        return grid_str[:-1]# }}}
