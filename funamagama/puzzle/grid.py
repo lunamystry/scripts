@@ -43,13 +43,19 @@ class Grid():
             bg.append(row)
         return bg# }}}
 
-    def place(self, *args):# {{{
+    def place(self, *args, **kwargs):# {{{
         '''
             Tries to place the given string(s) on the grid in random directions
             and starting positions
+
+            takes a list of strings to place
+            and optionally, list of directions
         '''
-        directions = ['EAST', 'WEST', 'SOUTH', 'NORTH', 'NORTHEAST',
-                'NORTHWEST', 'SOUTHEAST', 'SOUTHWEST']
+        if 'directions' in kwargs:
+            directions = kwargs['directions']
+        else:
+            directions = ['EAST', 'WEST', 'SOUTH', 'NORTH', 'NORTHEAST',
+                    'NORTHWEST', 'SOUTHEAST', 'SOUTHWEST']
         not_placed = []
 
         for arg in args:
