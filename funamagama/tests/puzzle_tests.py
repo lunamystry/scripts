@@ -33,10 +33,11 @@ def test_can_select_the_directions_to_place_in():
 
 def test_can_place_words_multiple_times_without_overlap():
     '''
-        I would like to be able to place the same word multiple times
+        I would like to be able to place the same word multiple times,
+        this is not really a test when I think I about it
     '''
     grid = Grid(5, 5)
-    res = grid.place('monty', 'monty', 'monty', 'monty', 'monty', 
+    res = grid.place('monty', 'monty', 'monty', 'monty', 'monty',
             directions=['SOUTH'])
     assert(res == [])
 
