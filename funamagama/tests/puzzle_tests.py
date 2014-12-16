@@ -28,5 +28,15 @@ def test_can_select_the_directions_to_place_in():
         What if I don't want diagonal placement of words
     '''
     grid = Grid(5, 5)
-    res = grid.place('monty', 'python', 'monty', directions=['EAST'])
+    res = grid.place('monty', 'python', directions=['EAST'])
     assert(res == ['python'])
+
+def test_can_place_words_multiple_times_without_overlap():
+    '''
+        I would like to be able to place the same word multiple times
+    '''
+    grid = Grid(5, 5)
+    res = grid.place('monty', 'monty', 'monty', 'monty', 'monty', 
+            directions=['SOUTH'])
+    print(grid)
+    assert(res == [])
