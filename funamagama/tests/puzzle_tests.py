@@ -40,3 +40,4 @@ def test_can_place_words_multiple_times_without_overlap():
             directions=['SOUTH'])
     print(grid)
     assert(res == [])
+

@@ -91,7 +91,7 @@ class Grid():
         for point in within_bounds:
             word.start = point
             for grid_word in self.words:
-                if self.collision(word, grid_word):
+                if word.collision(grid_word):
                     collision_points.append(point)
         # filter points collision points
         for point in within_bounds:
@@ -135,16 +135,6 @@ class Grid():
                     len(self._grid[0]) - (len(word) - 1))
                 }
         return bounds[word.direction]# }}}
-
-    def collision(self, first, second):# {{{
-        '''
-            Check if two words collide and cannot intersect
-        '''
-        for i, p1 in enumerate(first.points):
-            for j, p2 in enumerate(second.points):
-                if p1 == p2 and first.text[i] != second.text[j]:
-                    return True
-        return False# }}}
 
     def __str__(self):# {{{
         '''
