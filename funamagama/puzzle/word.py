@@ -40,7 +40,7 @@ class Word(object):
             for j, p2 in enumerate(second.points):
                 if p1 == p2 and self.text[i] != second.text[j]:
                     return True
-                elif self.text[i] == second.text[j]:
+                elif p1 == p2 and self.text[i] == second.text[j]:
                     overlap += 1.0
                     if int(100*(overlap/min(len(self), len(second)))) > 30:
                         return True
