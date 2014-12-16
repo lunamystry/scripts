@@ -145,3 +145,6 @@ class Grid():
             grid_str += " ".join(row)
             grid_str += "\n"
         return grid_str[:-1]# }}}
+
+    def __repr__(self):
+        return self.__str__()
