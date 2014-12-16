@@ -28,7 +28,7 @@ class Word(object):
     @start.setter
     def start(self, value):
         self._start = value
-        self.points = self._calculate_points()
+        self.points = self.calculate_points()
 
 
     def collision(self, second, max_overlap=None):# {{{
@@ -49,8 +49,8 @@ class Word(object):
         return False# }}}
 
 
-    def _calculate_points(self):
-        row_incr, col_incr = self._increments()
+    def calculate_points(self):
+        row_incr, col_incr = self.increments()
         points = []
         row = self.start.row
         col = self.start.col
@@ -64,7 +64,7 @@ class Word(object):
             points.append(Point(row, col))
         return points
 
-    def _increments(self):
+    def increments(self):
         col_incr = 0
         row_incr = 0
         if self.direction == 'EAST':
