@@ -6,7 +6,8 @@ creation date: 13 December 2014
 update date: 16 December 2014
 
 """
-from puzzle.grid import Grid
+from generate.grid import Grid
+
 
 def test_place_returns_list_if_successful():
     '''
