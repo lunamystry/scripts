@@ -7,7 +7,7 @@ creation date: 16 December 2014
 """
 import pytest
 
-from puzzle.word import Word
+from generate.word import Word
 
 
 def test_words_cant_be_less_than_2():
