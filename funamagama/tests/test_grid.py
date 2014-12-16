@@ -3,6 +3,7 @@
 author: Leonard Mbuli <mail@mandla.me>
 
 creation date: 13 December 2014
+update date: 16 December 2014
 
 """
 from puzzle.grid import Grid
