@@ -11,14 +11,22 @@ def test_place_returns_list_if_successful():
     '''
         Can I place a word on the grid
     '''
-    g = Grid(5, 5)
-    res = g.place('monty')
+    grid = Grid(5, 5)
+    res = grid.place('monty')
     assert(res == [])
 
 def test_place_returns_list_of_words_not_placed():
     '''
         What if some words don't fit into the grid?
     '''
-    g = Grid(5, 5)
-    res = g.place('monty', 'python')
+    grid = Grid(5, 5)
+    res = grid.place('monty', 'python')
+    assert(res == ['python'])
+
+def test_can_select_the_directions_to_place_in():
+    '''
+        What if I don't want diagonal placement of words
+    '''
+    grid = Grid(5, 5)
+    res = grid.place('monty', 'python', 'monty', directions=['EAST'])
     assert(res == ['python'])
