@@ -17,6 +17,8 @@ import logging
 
 class Word(object):
     def __init__(self, text, direction, grid):
+        if len(text) < 2:
+            raise ValueError("word '%s' is too short" % text)
         self.text = re.sub("["+string.punctuation+"\d]", "", text.lower(), 0, 0)
         self.direction = direction
         self.grid = grid
