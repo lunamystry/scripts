@@ -43,7 +43,7 @@ function ubuntu
     echo "Ubuntu not yet supported..."
 }
 
-function suse
+function sles
 {
     echo "Boostrapping on openSUSE/SLES..."
     http="http:\/\/" # I will clean up input properly later... maybe
@@ -125,7 +125,9 @@ if [ "$1" = "--help" ]; then
     exit 1
 fi
 
-if [ "$1" = "suse" ]; then
+if [ "$1" = "sles" ]; then
+    sles $2
+elif [ "$1" = "suse" ]; then
     suse $2
 elif [ "$1" = "ubuntu" ]; then
     ubuntu $2
