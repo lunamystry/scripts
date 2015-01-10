@@ -10,7 +10,6 @@ descr = """
 """
 
 import fileinput
-import re
 import os
 import sys
 import glob
@@ -71,15 +70,10 @@ def find_filenames(directory, extension, is_recursive):
 
 def search_replace(searchterm, replaceterm, filename):
     if os.path.isfile(filename):
-        replacements = 0
         for line in fileinput.input(filename, inplace=True):
-            if re.match(r''+searchterm, line) is not None:
-                replacements = replacements + 1
-                line = line.replace(searchterm, replaceterm)
-                sys.stdout.write(line)
-            else:
-                sys.stdout.write(line)
-        print("IN: "+filename)
+            line = line.replace(searchterm, replaceterm)
+            sys.stdout.write(line)
+
 
 if __name__ == '__main__':
     main()
