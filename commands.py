@@ -10,6 +10,11 @@ commands: A script to help me manager and remember commands which
              (ie store in a directory)
              I want it to work like gmail's tags
 
+Commands to add
+===============
+  uname -a  # add command
+  lscpi  # check hardware
+
 author: Leonard Mandla Mbuli <mandla.mbuli@live.co.za>
 
 creation date: 08 July 2011
