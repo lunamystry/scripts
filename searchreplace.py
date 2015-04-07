@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-descr = """
+'''
     searchreplace
 
     author: Leonard Mandla Mbuli <lm.mbuli@gmail.com>
@@ -7,7 +7,7 @@ descr = """
     creation date: 22 September 2012
 
     python 3
-"""
+'''
 
 import fileinput
 import os
@@ -18,28 +18,28 @@ import textwrap
 
 
 def main():
-    """ Does everything """
+    '''Does everything'''
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        description=textwrap.dedent(descr)
+        description=textwrap.dedent(__doc__)
         )
     parser.add_argument('searchterm',
-                        help="The term to search for")
+                        help='The term to search for')
     parser.add_argument('replaceterm',
-                        help="The term to replace the search term with")
-    parser.add_argument('-d', '--directory', action='store', default=".",
-                        help="The directory to search within, default is \
-                                current directory")
-    parser.add_argument('-e', '--extension', action='store', default="",
-                        help="Search only for files matching the extension")
+                        help='The term to replace the search term with')
+    parser.add_argument('-d', '--directory', action='store', default='.',
+                        help='The directory to search within, default is \
+                                current directory')
+    parser.add_argument('-e', '--extension', action='store', default='',
+                        help='Search only for files matching the extension')
     parser.add_argument('-f', '--filename', action='store',
-                        help="Search and replace only within specified file")
+                        help='Search and replace only within specified file')
     parser.add_argument('-r', '--recursive', action='store_true',
-                        help="When searching in a directory, where to decend \
-                        into sub directories")
+                        help='When searching in a directory, where to decend \
+                        into sub directories')
     args = parser.parse_args()
-    print("SEARCH: "+args.searchterm)
-    print("REPLACE: "+args.replaceterm)
+    print('SEARCH: '+args.searchterm)
+    print('REPLACE: '+args.replaceterm)
 
     if args.filename is None:
         filenames = find_filenames(args.directory,
@@ -52,8 +52,8 @@ def main():
 
 
 def find_filenames(directory, extension, is_recursive):
-    "searches either the provided directory for filenames "
-    paths = glob.glob(directory+"/*")
+    '''searches either the provided directory for filenames'''
+    paths = glob.glob(directory+'/*')
     filenames = []
     for path in paths:
         if os.path.isdir(path) and is_recursive:
@@ -61,9 +61,9 @@ def find_filenames(directory, extension, is_recursive):
         else:
             filenames.append(path)
 
-    if extension != "":
+    if extension != '':
         filenames = [filename for filename in filenames
-                     if os.path.splitext(filename)[1] == "."+extension]
+                     if os.path.splitext(filename)[1] == '.'+extension]
 
     return filenames
 
@@ -76,4 +76,4 @@ def search_replace(searchterm, replaceterm, filename):
 
 
 if __name__ == '__main__':
-    main()
+    main)
