@@ -38,8 +38,7 @@ def main():
                         help='When searching in a directory, where to decend \
                         into sub directories')
     args = parser.parse_args()
-    print('SEARCH: '+args.searchterm)
-    print('REPLACE: '+args.replaceterm)
+    print('replace "{}" with "{}"'.format(args.replaceterm, args.searchterm))
 
     if args.filename is None:
         filenames = find_filenames(args.directory,
@@ -53,17 +52,18 @@ def main():
 
 def find_filenames(directory, extension, is_recursive):
     '''searches either the provided directory for filenames'''
-    paths = glob.glob(directory+'/*')
-    filenames = []
-    for path in paths:
-        if os.path.isdir(path) and is_recursive:
-            filenames += find_filenames(path, extension, is_recursive)
-        else:
-            filenames.append(path)
+    if extension and not extension.startswith('.'):
+        extension = '.' + extension
 
-    if extension != '':
-        filenames = [filename for filename in filenames
-                     if os.path.splitext(filename)[1] == '.'+extension]
+    filenames = []
+    if is_recursive:
+        for root, folders, names in os.walk(directory):
+            for filename in names:
+                filenames.append(os.path.join(root, filename))
+    else:
+        for filename in glob.glob(directory+'/*'+extension):
+            if os.path.isfile(filename):
+                filenames.append(filename)
 
     return filenames
 
@@ -72,8 +72,8 @@ def search_replace(searchterm, replaceterm, filename):
     if os.path.isfile(filename):
         for line in fileinput.input(filename, inplace=True):
             line = line.replace(searchterm, replaceterm)
-            sys.stdout.write(line)
+            sys.stdoesut.write(line)
 
 
 if __name__ == '__main__':
-    main)
+    main()
