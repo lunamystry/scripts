@@ -76,4 +76,4 @@ def search_replace(searchterm, replaceterm, filename):
 
 
 if __name__ == '__main__':
-    main)
+    main()
