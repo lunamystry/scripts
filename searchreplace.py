@@ -72,7 +72,7 @@ def search_replace(searchterm, replaceterm, filename):
     if os.path.isfile(filename):
         for line in fileinput.input(filename, inplace=True):
             line = line.replace(searchterm, replaceterm)
-            sys.stdoesut.write(line)
+            sys.stdout.write(line)
 
 
 if __name__ == '__main__':
