@@ -5,10 +5,10 @@
     author: Leonard Mandla Mbuli <lm.mbuli@gmail.com>
 
     creation date: 22 September 2012
+    updated: April 2015
 
     python 3
 '''
-
 import fileinput
 import os
 import sys
@@ -37,6 +37,12 @@ def main():
     parser.add_argument('-r', '--recursive', action='store_true',
                         help='When searching in a directory, where to decend \
                         into sub directories')
+    parser.add_argument('-o', '--omit',
+                        action='store',
+                        help='dont search in directory')
+    parser.add_argument('-c', '--confirm',
+                        action='store_true',
+                        help='ask before you replace')
     args = parser.parse_args()
     print('replace "{}" with "{}"'.format(args.replaceterm, args.searchterm))
 
@@ -57,7 +63,7 @@ def find_filenames(directory, extension, is_recursive):
 
     filenames = []
     if is_recursive:
-        for root, folders, names in os.walk(directory):
+        for root, _, names in os.walk(directory):
             for filename in names:
                 filenames.append(os.path.join(root, filename))
     else:
