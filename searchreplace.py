@@ -16,6 +16,7 @@ import glob
 import argparse
 import textwrap
 
+IGNORE = ('.git','.svn', '.bzr', '_cabal')
 
 def main():
     '''Does everything'''
@@ -56,10 +57,12 @@ def main():
         search_replace(args.searchterm, args.replaceterm, args.filename)
 
 
-def find_filenames(directory, extension, is_recursive):
+def find_filenames(directory, extension, is_recursive, ignore=None):
     '''searches either the provided directory for filenames'''
     if extension and not extension.startswith('.'):
         extension = '.' + extension
+    if ignore is None:
+        ignore = IGNORE
 
     filenames = []
     if is_recursive:
