@@ -57,7 +57,7 @@ def main():
         search_replace(args.searchterm, args.replaceterm, args.filename)
 
 
-def find_filenames(directory, extension, is_recursive, ignore=None):
+def find_filenames(directory, extension=None, is_recursive=True, ignore=None):
     '''searches either the provided directory for filenames'''
     if extension and not extension.startswith('.'):
         extension = '.' + extension

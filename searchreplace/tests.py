@@ -14,7 +14,8 @@ from searchreplace import *
 import os
 import unittest
 
-DIRS = ['test_recursively/directory/thing', 'test_directory/directory2']
+IGNORE = ('.ignore')
+DIRS = ('top/sub1/subsub1', 'top/sub1/subsub2', 'top/sub2/.ignore/ignore1')
 
 class SearchReplace(unittest.TestCase):
     '''testing the searchreplace script'''
@@ -25,9 +26,10 @@ class SearchReplace(unittest.TestCase):
             if not os.path.isdir(folder):
                 os.makedirs(folder)
 
-    def test_replace_recursively_in_directories(self):
+    def test_find_filenames_recursively_in_directories(self):
         '''Should be able to search and replace in directories'''
-        assert 1 == 1
+        filenames = find_filenames('top', None, True, None)
+        self.assertEquals(filenames, DIRS)
 
     def tearDown(self):
         '''Remove the directories used in testing'''
