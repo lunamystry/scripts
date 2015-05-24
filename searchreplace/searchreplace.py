@@ -76,10 +76,9 @@ def find_filenames(directory, extension=None, is_recursive=True, ignore_str=None
                      for filename in filenames
                      if not ignore_rgx.search(filename)]
     else:
-        for filename in glob.glob(directory+'/*'):
-            if os.path.isfile(filename):
-                if not ignore_rgx.search(filename):
-                    filenames.append(filename)
+        filenames = [filename for filename in glob.glob(directory+'/*')
+                     if os.path.isfile(filename) and
+                     not ignore_rgx.search(filename)]
     return filenames
 
 
