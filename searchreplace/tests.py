@@ -14,12 +14,13 @@ from searchreplace import *
 from collections import namedtuple
 import os
 import unittest
+import shutil
 
 Dir = namedtuple('Dir', 'name filenames')
 
 IGNORE = ('.ignore')
-DIRS = (Dir('top/sub1/subsub1', ['file.txt']),
-        Dir('top/sub1/subsub2', ['file.txt']),
+DIRS = (Dir('top/sub1/subsub1', ['file1.1.txt', 'file1.2.txt']),
+        Dir('top/sub1/subsub2', ['file2.txt']),
         Dir('top/sub2/.ignore/ignore1', ['ignored.txt']))
 
 class SearchReplace(unittest.TestCase):
@@ -37,14 +38,17 @@ class SearchReplace(unittest.TestCase):
 
     def test_find_filenames_recursively_in_directories(self):
         '''Should be able to search and replace in directories'''
-        filenames = find_filenames('top', None, True, 'ignore')
-        print(filenames)
-    #    self.assertEquals(filenames, list(DIRS))
+        filenames = find_filenames('top', None, True, None)
+        expected = [os.path.join(directory.name, fname)
+                    for directory in DIRS
+                    for fname in directory.filenames]
+        self.assertEqual(sorted(expected), sorted(filenames))
 
-    # def tearDown(self):
-    #     '''Remove the directories used in testing'''
-    #     for folder in DIRS:
-    #         os.removedirs(folder)
+
+    def tearDown(self):
+        '''Remove the directories used in testing'''
+        for folder in DIRS:
+            shutil.rmtree(folder.name)
 
 
 if __name__ == '__main__':
