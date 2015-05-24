@@ -46,7 +46,7 @@ def main():
                         action='store_true',
                         help='ask before you replace')
     args = parser.parse_args()
-    print('replace "{replaceterm}" with "{searchterm}"'.format(**args))
+    print('replace "%s" with "%s"' % (args.replaceterm, args.searchterm))
 
     if args.filename is None:
         filenames = find_filenames(args.directory,
