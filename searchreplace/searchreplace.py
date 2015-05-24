@@ -46,7 +46,7 @@ def main():
                         action='store_true',
                         help='ask before you replace')
     args = parser.parse_args()
-    print('replace "{}" with "{}"'.format(args.replaceterm, args.searchterm))
+    print('replace "{replaceterm}" with "{searchterm}"'.format(**args))
 
     if args.filename is None:
         filenames = find_filenames(args.directory,
@@ -58,26 +58,28 @@ def main():
         search_replace(args.searchterm, args.replaceterm, args.filename)
 
 
-def find_filenames(directory, extension=None, is_recursive=True, ignore_list=None):
+def find_filenames(directory, extension=None, is_recursive=True, ignore_str=None):
     '''searches either the provided directory for filenames'''
     if extension and not extension.startswith('.'):
         extension = '.' + extension
-    if ignore_list is None:
-        ignore_list = IGNORE_LIST
+    if ignore_str is None:
+        ignore_str = r'|'.join(IGNORE_LIST)
+    else:
+        ignore_str += '|' + r'|'.join(IGNORE_LIST)
 
-    ignore_rgx = re.compile(r'|'.join(ignore_list))
+    ignore_rgx = re.compile(ignore_str)
 
     filenames = []
     if is_recursive:
-        for root, _, names in os.walk(directory):
-            for filename in names:
-                if not ignore_rgx.search(filename):
-                    filenames.append(os.path.join(root, filename))
+        filenames = [os.path.join(root, filename)
+                     for root, _, filenames in os.walk(directory)
+                     for filename in filenames
+                     if not ignore_rgx.search(filename)]
     else:
         for filename in glob.glob(directory+'/*'+extension):
             if os.path.isfile(filename):
-                filenames.append(filename)
-
+                if not ignore_rgx.search(filename):
+                    filenames.append(filename)
     return filenames
 
 
