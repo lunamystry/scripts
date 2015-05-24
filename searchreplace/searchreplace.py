@@ -9,11 +9,12 @@
 
     python 3
 '''
-import fileinput
-import os
-import sys
-import glob
 import argparse
+import fileinput
+import glob
+import os
+import re
+import sys
 import textwrap
 
 IGNORE_LIST = ('.git','.svn', '.bzr', '_cabal')
@@ -64,11 +65,14 @@ def find_filenames(directory, extension=None, is_recursive=True, ignore_list=Non
     if ignore_list is None:
         ignore_list = IGNORE_LIST
 
+    ignore_rgx = re.compile(r'|'.join(ignore_list))
+
     filenames = []
     if is_recursive:
         for root, _, names in os.walk(directory):
             for filename in names:
-                filenames.append(os.path.join(root, filename))
+                if not ignore_rgx.search(filename):
+                    filenames.append(os.path.join(root, filename))
     else:
         for filename in glob.glob(directory+'/*'+extension):
             if os.path.isfile(filename):
