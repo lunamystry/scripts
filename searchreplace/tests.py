@@ -19,7 +19,7 @@ import shutil
 
 Dir = namedtuple('Dir', 'name filenames')
 
-DIRS = (Dir('top', ['file.top']),
+DIRS = (Dir('top', ['file.top', 'ignore.top']),
         Dir('top/text', ['file1.txt', 'file2.txt']),
         Dir('top/sub1/python', ['file1.py', 'file2.py', 'ignore.py']),
         Dir('top/sub2/.ignore/ignore1', ['ignored.ignore']))
@@ -42,14 +42,20 @@ class SearchReplace(unittest.TestCase):
                                     extension=None,
                                     is_recursive=False,
                                     ignore_str=None)
+        expected = ['top/file.top', 'top/ignore.top']
+        self.assertEqual(sorted(expected), sorted(filenames))
+
+    def test_find_filenames_non_recursive_with_ignored(self):
+        ignore_str=r'ignore'
+        filenames = find_filenames('top',
+                                    extension=None,
+                                    is_recursive=False,
+                                    ignore_str=ignore_str)
         expected = ['top/file.top']
         self.assertEqual(sorted(expected), sorted(filenames))
 
     def test_find_filenames_recursively_in_directories(self):
-        filenames = find_filenames('top',
-                                    extension=None,
-                                    is_recursive=True,
-                                    ignore_str=None)
+        filenames = find_filenames('top', extension=None)
         expected = [os.path.join(directory.name, fname)
                     for directory in DIRS
                     for fname in directory.filenames]
@@ -66,6 +72,12 @@ class SearchReplace(unittest.TestCase):
                     for fname in directory.filenames
                     if not re.search(ignore_str, fname)]
         self.assertEqual(sorted(expected), sorted(filenames))
+
+
+    def test_find_only_files_with_exension(self):
+        filenames = find_filenames('top', extension=None)
+        print(filenames)
+
 
     def tearDown(self):
         '''Remove the directories used in testing'''
