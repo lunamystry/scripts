@@ -69,7 +69,6 @@ def find_filenames(directory, extension=None, is_recursive=True, ignore_str=None
 
     ignore_rgx = re.compile(ignore_str)
 
-    filenames = []
     if is_recursive:
         filenames = [os.path.join(root, filename)
                      for root, _, filenames in os.walk(directory)
