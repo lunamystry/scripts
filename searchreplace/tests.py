@@ -19,7 +19,8 @@ import shutil
 
 Dir = namedtuple('Dir', 'name filenames')
 
-DIRS = (Dir('top/text', ['file1.txt', 'file2.txt']),
+DIRS = (Dir('top', ['file.top']),
+        Dir('top/text', ['file1.txt', 'file2.txt']),
         Dir('top/sub1/python', ['file1.py', 'file2.py', 'ignore.py']),
         Dir('top/sub2/.ignore/ignore1', ['ignored.ignore']))
 
@@ -36,8 +37,15 @@ class SearchReplace(unittest.TestCase):
                 if not os.path.exists(fname):
                     open(fname, 'w').close()
 
+    def test_find_filenames_non_recursive(self):
+        filenames = find_filenames('top',
+                                    extension=None,
+                                    is_recursive=False,
+                                    ignore_str=None)
+        expected = ['top/file.top']
+        self.assertEqual(sorted(expected), sorted(filenames))
+
     def test_find_filenames_recursively_in_directories(self):
-        '''Should be able to search and replace in directories'''
         filenames = find_filenames('top',
                                     extension=None,
                                     is_recursive=True,
@@ -48,7 +56,6 @@ class SearchReplace(unittest.TestCase):
         self.assertEqual(sorted(expected), sorted(filenames))
 
     def test_find_filenames_recursively_in_directories_without_ignored(self):
-        '''Should be able to search and replace in directories'''
         ignore_str=r'ignore'
         filenames = find_filenames('top',
                                     extension=None,
@@ -63,7 +70,8 @@ class SearchReplace(unittest.TestCase):
     def tearDown(self):
         '''Remove the directories used in testing'''
         for folder in DIRS:
-            shutil.rmtree(folder.name)
+            if os.path.isdir(folder.name):
+                shutil.rmtree(folder.name)
 
 
 if __name__ == '__main__':
