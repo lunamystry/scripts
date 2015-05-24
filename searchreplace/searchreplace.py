@@ -58,10 +58,12 @@ def main():
         search_replace(args.searchterm, args.replaceterm, args.filename)
 
 
-def find_filenames(directory, extension=None, is_recursive=True, ignore_str=None):
+def find_filenames(directory, extension='', is_recursive=True, ignore_str=None):
     '''searches either the provided directory for filenames'''
+    # Add '.' to avoid .ctop vs .top if extesion=top
     if extension and not extension.startswith('.'):
         extension = '.' + extension
+
     if ignore_str is None:
         ignore_str = r'|'.join(IGNORE_LIST)
     else:
@@ -73,11 +75,13 @@ def find_filenames(directory, extension=None, is_recursive=True, ignore_str=None
         filenames = [os.path.join(root, filename)
                      for root, _, filenames in os.walk(directory)
                      for filename in filenames
-                     if not ignore_rgx.search(filename)]
+                     if not ignore_rgx.search(filename) and 
+                     filename.endswith(extension)]
     else:
         filenames = [filename for filename in glob.glob(directory+'/*')
                      if os.path.isfile(filename) and
-                     not ignore_rgx.search(filename)]
+                     not ignore_rgx.search(filename) and
+                     filename.endswith(extension)]
     return filenames
 
 
