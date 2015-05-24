@@ -39,7 +39,7 @@ def main():
     parser.add_argument('-r', '--recursive', action='store_true',
                         help='When searching in a directory, where to decend \
                         into sub directories')
-    parser.add_argument('-o', '--omit',
+    parser.add_argument('-i', '--ignore',
                         action='store',
                         help='dont search in directory')
     parser.add_argument('-c', '--confirm',
@@ -51,17 +51,20 @@ def main():
     if args.filename is None:
         filenames = find_filenames(args.directory,
                                    args.extension,
-                                   args.recursive)
+                                   args.recursive,
+                                   args.ignore)
         for filename in filenames:
             search_replace(args.searchterm, args.replaceterm, filename)
     else:
         search_replace(args.searchterm, args.replaceterm, args.filename)
 
 
-def find_filenames(directory, extension=None, is_recursive=True, ignore_str=None):
+def find_filenames(directory, extension='', is_recursive=True, ignore_str=None):
     '''searches either the provided directory for filenames'''
+    # Add '.' to avoid .ctop vs .top if extesion=top
     if extension and not extension.startswith('.'):
         extension = '.' + extension
+
     if ignore_str is None:
         ignore_str = r'|'.join(IGNORE_LIST)
     else:
@@ -73,11 +76,13 @@ def find_filenames(directory, extension=None, is_recursive=True, ignore_str=None
         filenames = [os.path.join(root, filename)
                      for root, _, filenames in os.walk(directory)
                      for filename in filenames
-                     if not ignore_rgx.search(filename)]
+                     if not ignore_rgx.search(filename) and 
+                     filename.endswith(extension)]
     else:
         filenames = [filename for filename in glob.glob(directory+'/*')
                      if os.path.isfile(filename) and
-                     not ignore_rgx.search(filename)]
+                     not ignore_rgx.search(filename) and
+                     filename.endswith(extension)]
     return filenames
 
 
