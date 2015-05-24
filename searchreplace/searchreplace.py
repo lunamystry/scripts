@@ -5,17 +5,19 @@
     author: Leonard Mandla Mbuli <lm.mbuli@gmail.com>
 
     creation date: 22 September 2012
+    updated: April 2015
 
     python 3
 '''
-
-import fileinput
-import os
-import sys
-import glob
 import argparse
+import fileinput
+import glob
+import os
+import re
+import sys
 import textwrap
 
+IGNORE_LIST = ('.git','.svn', '.bzr', '_cabal')
 
 def main():
     '''Does everything'''
@@ -37,8 +39,14 @@ def main():
     parser.add_argument('-r', '--recursive', action='store_true',
                         help='When searching in a directory, where to decend \
                         into sub directories')
+    parser.add_argument('-o', '--omit',
+                        action='store',
+                        help='dont search in directory')
+    parser.add_argument('-c', '--confirm',
+                        action='store_true',
+                        help='ask before you replace')
     args = parser.parse_args()
-    print('replace "{}" with "{}"'.format(args.replaceterm, args.searchterm))
+    print('replace "{replaceterm}" with "{searchterm}"'.format(**args))
 
     if args.filename is None:
         filenames = find_filenames(args.directory,
@@ -50,21 +58,27 @@ def main():
         search_replace(args.searchterm, args.replaceterm, args.filename)
 
 
-def find_filenames(directory, extension, is_recursive):
+def find_filenames(directory, extension=None, is_recursive=True, ignore_str=None):
     '''searches either the provided directory for filenames'''
     if extension and not extension.startswith('.'):
         extension = '.' + extension
+    if ignore_str is None:
+        ignore_str = r'|'.join(IGNORE_LIST)
+    else:
+        ignore_str += '|' + r'|'.join(IGNORE_LIST)
+
+    ignore_rgx = re.compile(ignore_str)
 
     filenames = []
     if is_recursive:
-        for root, folders, names in os.walk(directory):
-            for filename in names:
-                filenames.append(os.path.join(root, filename))
+        filenames = [os.path.join(root, filename)
+                     for root, _, filenames in os.walk(directory)
+                     for filename in filenames
+                     if not ignore_rgx.search(filename)]
     else:
-        for filename in glob.glob(directory+'/*'+extension):
-            if os.path.isfile(filename):
-                filenames.append(filename)
-
+        filenames = [filename for filename in glob.glob(directory+'/*')
+                     if os.path.isfile(filename) and
+                     not ignore_rgx.search(filename)]
     return filenames
 
 

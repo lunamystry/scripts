@@ -63,3 +63,5 @@ docs/_build/
 # Probably temporary
 *.ini
 
+# test directory
+searchreplace/top
