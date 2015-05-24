@@ -39,7 +39,7 @@ def main():
     parser.add_argument('-r', '--recursive', action='store_true',
                         help='When searching in a directory, where to decend \
                         into sub directories')
-    parser.add_argument('-o', '--omit',
+    parser.add_argument('-i', '--ignore',
                         action='store',
                         help='dont search in directory')
     parser.add_argument('-c', '--confirm',
@@ -51,7 +51,8 @@ def main():
     if args.filename is None:
         filenames = find_filenames(args.directory,
                                    args.extension,
-                                   args.recursive)
+                                   args.recursive,
+                                   args.ignore)
         for filename in filenames:
             search_replace(args.searchterm, args.replaceterm, filename)
     else:
