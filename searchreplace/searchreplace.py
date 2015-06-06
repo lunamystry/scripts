@@ -10,7 +10,6 @@
     python 3
 '''
 import argparse
-import fileinput
 import glob
 import os
 import re
@@ -46,7 +45,7 @@ def main():
                         action='store_true',
                         help='ask before you replace')
     args = parser.parse_args()
-    print('replace "%s" with "%s"' % (args.replaceterm, args.searchterm))
+    print('replace "%s" with "%s"' % (args.searchterm, args.replaceterm))
 
     if args.filename is None:
         filenames = find_filenames(args.directory,
@@ -54,9 +53,9 @@ def main():
                                    args.recursive,
                                    args.ignore)
         for filename in filenames:
-            search_replace(args.searchterm, args.replaceterm, filename)
+            search_replace(args.searchterm, args.replaceterm, filename, args.confirm)
     else:
-        search_replace(args.searchterm, args.replaceterm, args.filename)
+        search_replace(args.searchterm, args.replaceterm, args.filename, args.confirm)
 
 
 def find_filenames(directory, extension='', is_recursive=True, ignore_str=None):
@@ -76,7 +75,7 @@ def find_filenames(directory, extension='', is_recursive=True, ignore_str=None):
         filenames = [os.path.join(root, filename)
                      for root, _, filenames in os.walk(directory)
                      for filename in filenames
-                     if not ignore_rgx.search(filename) and 
+                     if not ignore_rgx.search(filename) and
                      filename.endswith(extension)]
     else:
         filenames = [filename for filename in glob.glob(directory+'/*')
@@ -86,11 +85,34 @@ def find_filenames(directory, extension='', is_recursive=True, ignore_str=None):
     return filenames
 
 
-def search_replace(searchterm, replaceterm, filename):
+def should_replace(searchterm, line_info):
+    '''Should the line be done'''
+    if re.search(searchterm, line_info['line']):
+        info = '{lineno} "{filename}": {line}'.format(**line_info)
+        print(info, end='')
+        ans = input('\tReplace? [Y/n] ')
+        if ans.lower() == 'n':
+            return False
+        else:
+            return True
+    return False
+
+
+def search_replace(searchterm, replaceterm, filename, confirm=False):
     if os.path.isfile(filename):
-        for line in fileinput.input(filename, inplace=True):
-            line = line.replace(searchterm, replaceterm)
-            sys.stdout.write(line)
+        with open(filename, 'r') as original_file:
+            backup_filename = ".%s.bak" % filename
+            with open(backup_filename, 'w') as backup_file:
+                lineno = 0
+                for line in original_file:
+                    lineno += 1
+                    line_info = {'lineno': lineno,
+                                'filename': filename,
+                                'line': line}
+                    if confirm and should_replace(searchterm, line_info):
+                        line = line.replace(searchterm, replaceterm)
+                    backup_file.write(line)
+        os.rename(backup_filename, filename)
 
 
 if __name__ == '__main__':
