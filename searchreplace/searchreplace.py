@@ -76,7 +76,7 @@ def find_filenames(directory, extension='', is_recursive=True, ignore_str=None):
         filenames = [os.path.join(root, filename)
                      for root, _, filenames in os.walk(directory)
                      for filename in filenames
-                     if not ignore_rgx.search(filename) and 
+                     if not ignore_rgx.search(filename) and
                      filename.endswith(extension)]
     else:
         filenames = [filename for filename in glob.glob(directory+'/*')
@@ -88,9 +88,13 @@ def find_filenames(directory, extension='', is_recursive=True, ignore_str=None):
 
 def search_replace(searchterm, replaceterm, filename):
     if os.path.isfile(filename):
-        for line in fileinput.input(filename, inplace=True):
-            line = line.replace(searchterm, replaceterm)
-            sys.stdout.write(line)
+        with open(filename, 'r') as original_file:
+            backup_filename = ".%s.bak" % filename
+            with open(backup_filename, 'w') as backup_file:
+                for line in original_file:
+                    line = line.replace(searchterm, replaceterm)
+                    backup_file.write(line)
+        os.rename(backup_filename, filename)
 
 
 if __name__ == '__main__':
