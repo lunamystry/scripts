@@ -2,10 +2,10 @@
 '''
     searchreplace
 
-    author: Leonard Mandla Mbuli <lm.mbuli@gmail.com>
+    author: Mandla Mbuli <mail@mandla.me>
 
     creation date: 22 September 2012
-    updated: April 2015
+    updated: June 2015
 
     python 2 or 3
 '''

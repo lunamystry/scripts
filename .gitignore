@@ -60,8 +60,5 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
-# Probably temporary
-*.ini
-
 # test directory
 searchreplace/top
