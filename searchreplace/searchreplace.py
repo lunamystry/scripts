@@ -7,8 +7,9 @@
     creation date: 22 September 2012
     updated: April 2015
 
-    python 3
+    python 2 or 3
 '''
+from __future__ import print_function
 import argparse
 import glob
 import os

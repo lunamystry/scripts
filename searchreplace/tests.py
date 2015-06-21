@@ -7,7 +7,7 @@
 
     created: April 2015
 
-    python 3
+    python 2 or 3
 '''
 
 from searchreplace import *
