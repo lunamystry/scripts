@@ -29,15 +29,15 @@ def main():
     parser.add_argument('replaceterm',
                         help='The term to replace the search term with')
     parser.add_argument('-d', '--directory', action='store', default='.',
-                        help='The directory to search within, default is \
-                                current directory')
+                        help=('The directory to search within, default is'
+                              'current directory'))
     parser.add_argument('-e', '--extension', action='store', default='',
                         help='Search only for files matching the extension')
     parser.add_argument('-f', '--filename', action='store',
                         help='Search and replace only within specified file')
     parser.add_argument('-r', '--recursive', action='store_true',
-                        help='When searching in a directory, where to decend \
-                        into sub directories')
+                        help=('When searching in a directory, where to decend'
+                              'into sub directories'))
     parser.add_argument('-i', '--ignore',
                         action='store',
                         help='dont search in directory')
@@ -99,20 +99,22 @@ def should_replace(searchterm, line_info):
 
 
 def search_replace(searchterm, replaceterm, filename, confirm=False):
-    if os.path.isfile(filename):
-        with open(filename, 'r') as original_file:
-            backup_filename = ".%s.bak" % filename
-            with open(backup_filename, 'w') as backup_file:
-                lineno = 0
-                for line in original_file:
-                    lineno += 1
-                    line_info = {'lineno': lineno,
-                                'filename': filename,
-                                'line': line}
-                    if confirm and should_replace(searchterm, line_info):
-                        line = line.replace(searchterm, replaceterm)
-                    backup_file.write(line)
-        os.rename(backup_filename, filename)
+    if not os.path.isfile(filename):
+        return
+
+    with open(filename, 'r') as original_file:
+        backup_filename = ".%s.bak" % filename
+        with open(backup_filename, 'w') as backup_file:
+            lineno = 0
+            for line in original_file:
+                lineno += 1
+                line_info = {'lineno': lineno,
+                            'filename': filename,
+                            'line': line}
+                if confirm and should_replace(searchterm, line_info):
+                    line = line.replace(searchterm, replaceterm)
+                backup_file.write(line)
+    os.rename(backup_filename, filename)
 
 
 if __name__ == '__main__':
