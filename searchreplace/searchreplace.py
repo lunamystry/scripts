@@ -38,11 +38,9 @@ def main():
     parser.add_argument('-r', '--recursive', action='store_true',
                         help=('When searching in a directory, where to decend'
                               'into sub directories'))
-    parser.add_argument('-i', '--ignore',
-                        action='store',
+    parser.add_argument('-i', '--ignore', action='store',
                         help='dont search in directory')
-    parser.add_argument('-c', '--confirm',
-                        action='store_true',
+    parser.add_argument('-c', '--confirm', action='store_true',
                         help='ask before you replace')
     args = parser.parse_args()
     print('replace "%s" with "%s"' % (args.searchterm, args.replaceterm))
@@ -78,6 +76,7 @@ def find_filenames(directory, extension='', is_recursive=True, ignore_str=None):
                      if not ignore_rgx.search(filename) and
                      filename.endswith(extension)]
     else:
+        # glob.glob (vs os.listdir) gives me the filename with dir for free
         filenames = [filename for filename in glob.glob(directory+'/*')
                      if os.path.isfile(filename) and
                      not ignore_rgx.search(filename) and
