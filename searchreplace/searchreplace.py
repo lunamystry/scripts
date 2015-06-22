@@ -91,10 +91,7 @@ def should_replace(searchterm, line_info):
         info = '{lineno} "{filename}": {line}'.format(**line_info)
         print(info, end='')
         ans = input('\tReplace? [Y/n] ')
-        if ans.lower() == 'n':
-            return False
-        else:
-            return True
+        return ans.lower() != 'n'
     return False
 
 
