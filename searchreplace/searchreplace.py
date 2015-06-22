@@ -30,14 +30,14 @@ def main():
     parser.add_argument('replaceterm',
                         help='The term to replace the search term with')
     parser.add_argument('-d', '--directory', action='store', default='.',
-                        help=('The directory to search within, default is'
+                        help=('The directory to search within, default is '
                               'current directory'))
     parser.add_argument('-e', '--extension', action='store', default='',
                         help='Search only for files matching the extension')
     parser.add_argument('-f', '--filename', action='store',
                         help='Search and replace only within specified file')
     parser.add_argument('-r', '--recursive', action='store_true',
-                        help=('When searching in a directory, where to decend'
+                        help=('When searching in a directory, where to decend '
                               'into sub directories'))
     parser.add_argument('-i', '--ignore', action='store',
                         help='dont search in directory')
