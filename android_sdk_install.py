@@ -22,7 +22,7 @@ def download(url, filename):
     f = open(filename, 'wb')
     meta = sdk_download.info()
     file_size = int(meta.getheaders("Content-Length")[0])
-    print "Downloading: %s Bytes: %s" % (filename, file_size)
+    print("Downloading: %s Bytes: %s" % (filename, file_size))
 
     file_size_dl = 0
     block_sz = 8192
@@ -36,7 +36,7 @@ def download(url, filename):
         f.write(buffer)
         status = r"%10d  [%3.2f%%]" % (file_size_dl, file_size_dl * 100. / file_size)
         status = status + chr(8)*(len(status)+1)
-        print status,
+        print(status)
 
     f.close()
 
