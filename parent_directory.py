@@ -21,8 +21,6 @@ logging.basicConfig(level=logging.INFO, format='%(message)s')
 # this lets us use regular expressions in the xpath
 ns = {'re': 'http://exslt.org/regular-expressions'}
 
-url = "http://dept.ee.wits.ac.za/~cheng/ELEN4017/tuts/"
-save_path = "/home/leny/University/networkfun/tutorials/"
 
 def download(url, save_path, reg, ns=ns):
     # fetch the page
