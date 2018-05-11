@@ -11,10 +11,13 @@ non-standard dependencies: lxml
 """
 
 import lxml.html
-import urllib.request, urllib.error, urllib.parse
+import urllib.request
+import urllib.error
+import urllib.parse
 import logging
 import argparse
 import os
+import threading
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 # construct a namespace dictionary to pass to the xpath() call
@@ -22,34 +25,50 @@ logging.basicConfig(level=logging.INFO, format='%(message)s')
 ns = {'re': 'http://exslt.org/regular-expressions'}
 
 
-def download(url, save_path, reg, ns=ns):
+
+def file_links(url, reg, ns=ns):
     # fetch the page
     res = urllib.request.urlopen(url)
 
     page = str(res.read())
+
     # parse the response into an xml tree
     tree = lxml.html.fromstring(page)
 
+    regex = fr'//a[re:test(@href, "{reg}", "i")]'
+    nodes = tree.xpath(regex, namespaces=ns)
+
+    def get_link(node):
+        filename = node.attrib['href']
+        file_url = urllib.parse.urljoin(url, filename)
+
+        return file_url, filename
+
+
+    print(list(map(get_link, nodes)))
+
+    return links
+
+
+def download(url, save_path, reg):
+    links = file_links(url, reg)
     if (not os.path.isdir(save_path)):
         os.makedirs(save_path)
 
 
-    reg = fr'//a[re:test(@href, "{reg}", "i")]'
+    # for node in tree.xpath(reg, namespaces=ns):
+    #     filename = node.attrib['href']
+    #     file_url = urllib.parse.urljoin(url, filename)
+    #     local_filename = os.path.join(save_path, filename)
 
-    # iterate over all <a> tags whose href ends in ".pdf" (case-insensitive)
-    for node in tree.xpath(reg, namespaces=ns):
-        filename = node.attrib['href']
-        file_url = urllib.parse.urljoin(url, filename)
-        local_filename = os.path.join(save_path, filename)
+    #     logging.info(f'Processing: {file_url}')
 
-        logging.info(f'Processing: {file_url}')
+    #     remote_file = urllib.request.urlopen(file_url)
+    #     local_file = open(local_filename, 'wb') # binary open file
+    #     local_file.write(remote_file.read())
+    #     local_file.close()
 
-        remote_file = urllib.request.urlopen(file_url)
-        local_file = open(local_filename, 'wb') # binary open file
-        local_file.write(remote_file.read())
-        local_file.close()
-
-        logging.info(f'Saved: {local_filename}')
+    #     logging.info(f'Saved: {local_filename}')
 
 
 if __name__ == '__main__':
