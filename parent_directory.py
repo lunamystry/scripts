@@ -29,7 +29,6 @@ logging.basicConfig(level=logging.INFO, format='%(message)s')
 # construct a namespace dictionary to pass to the xpath() call
 # this lets us use regular expressions in the xpath
 ns = {'re': 'http://exslt.org/regular-expressions'}
-DEFAULT_TIMEOUT = 10*60;
 
 Link = namedtuple('Link', 'url name')
 Input = namedtuple('Input', 'download_from save_to has')
@@ -66,27 +65,25 @@ async def download(links, save_path, loop):
 
     print(f'there are {len(links)} links to download.')
 
-    async def download_file(link, save_path, session):
+    async def download_file(save_path, session, link):
         logging.info(f'Downloading: {link.name}...')
         local_name = os.path.join(save_path, os.path.basename(link.name))
 
-        with async_timeout.timeout(DEFAULT_TIMEOUT):
-            async with session.get(link.url) as response:
-                async with aiofiles.open(local_name, 'wb') as fd:
-                    logging.info(f'Saving: {local_name}...')
-                    while True:
-                        chunk = await response.content.read(1024)
-                        if not chunk:
-                            break
-                        await fd.write(chunk)
+        async with session.get(link.url, timeout=None) as response:
+            async with aiofiles.open(local_name, 'wb') as fd:
+                logging.info(f'Saving: {local_name}...')
+                while True:
+                    chunk = await response.content.read(1024)
+                    if not chunk:
+                        break
+                    await fd.write(chunk)
 
-                logging.info(f'Saved: {link.name}')
-                return await response.release()
+            logging.info(f'Saved: {link.name}')
+            return await response.release()
+
 
     async with aiohttp.ClientSession(loop=loop) as session:
-        for link in links:
-            await download_file(link, save_path, session)
-
+        return await asyncio.wait(list(map(partial(download_file, save_path, session), links)))
 
 
 async def get_inputs(input_filename):
@@ -116,8 +113,9 @@ async def main(args, loop):
         inputs = [Input(args.download_from, args.save_to, args.has)]
 
     links_list = list(map(file_links, inputs))
+
     for links,args in zip(links_list, inputs):
-        await download(links, args.save_to, loop)
+        return await download(links, args.save_to, loop)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
