@@ -29,6 +29,7 @@ logging.basicConfig(level=logging.INFO, format='%(message)s')
 # construct a namespace dictionary to pass to the xpath() call
 # this lets us use regular expressions in the xpath
 ns = {'re': 'http://exslt.org/regular-expressions'}
+CHUNK_SIZE = 1024*10
 
 Link = namedtuple('Link', 'url name')
 Input = namedtuple('Input', 'download_from save_to has')
@@ -73,7 +74,7 @@ async def download(links, save_path, loop):
             async with aiofiles.open(local_name, 'wb') as fd:
                 logging.info(f'Saving: {local_name}...')
                 while True:
-                    chunk = await response.content.read(1024)
+                    chunk = await response.content.read(CHUNK_SIZE)
                     if not chunk:
                         break
                     await fd.write(chunk)
