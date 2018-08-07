@@ -1,4 +1,4 @@
-#! /usr/bin/env python3.6
+#! /usr/bin/env python3.7
 """
 Script to download files from the... uhm... somewhere
 
@@ -29,7 +29,7 @@ logging.basicConfig(level=logging.INFO, format='%(message)s')
 # construct a namespace dictionary to pass to the xpath() call
 # this lets us use regular expressions in the xpath
 ns = {'re': 'http://exslt.org/regular-expressions'}
-CHUNK_SIZE = 1024*10
+CHUNK_SIZE = 2048*10
 
 Link = namedtuple('Link', 'url name')
 Input = namedtuple('Input', 'download_from save_to has')
@@ -64,8 +64,6 @@ async def download(links, save_path, loop):
     if (not os.path.isdir(save_path)):
         os.makedirs(save_path)
 
-    print(f'there are {len(links)} links to download.')
-
     async def download_file(save_path, session, link):
         logging.info(f'Downloading: {link.name}...')
         local_name = os.path.join(save_path, os.path.basename(link.name))
@@ -79,9 +77,8 @@ async def download(links, save_path, loop):
                         break
                     await fd.write(chunk)
 
-            logging.info(f'Saved: {link.name}')
+            logging.info(f'Saved: {local_name}')
             return await response.release()
-
 
     async with aiohttp.ClientSession(loop=loop) as session:
         return await asyncio.wait(list(map(partial(download_file, save_path, session), links)))
@@ -113,10 +110,12 @@ async def main(args, loop):
     else:
         inputs = [Input(args.download_from, args.save_to, args.has)]
 
-    links_list = list(map(file_links, inputs))
+    link_lists = list(map(file_links, inputs))
+    logging.info(f'there are {len(link_lists)} link lists.')
 
-    for links,args in zip(links_list, inputs):
-        return await download(links, args.save_to, loop)
+    for links,args in zip(link_lists, inputs):
+        logging.info(f'there are {len(links)} links to download.')
+        await download(links, args.save_to, loop)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
