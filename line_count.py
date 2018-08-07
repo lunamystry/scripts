@@ -8,10 +8,12 @@
 '''
 from __future__ import print_function
 import os
+import time
 
 
 def main():
     '''The main function, go C++'''
+    time.sleep(10)
     for root, folders, filenames in os.walk('.'):
         for filename in filenames:
             if filename.endswith('.py'):
