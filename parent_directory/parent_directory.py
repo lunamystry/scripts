@@ -65,7 +65,7 @@ async def download(links, save_path, loop):
         os.makedirs(save_path)
 
     async def download_file(save_path, session, link):
-        logging.info(f'Downloading: {link.name}...')
+        logging.info(f'Downloading: {urllib.parse.unquote(link.name)}...')
         local_name = os.path.join(save_path, os.path.basename(link.name))
 
         async with session.get(link.url, timeout=None) as response:
