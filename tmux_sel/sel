@@ -1,3 +1,3 @@
 #!/bin/bash 
 
-eval $(python3 sel.py)
+eval $(python3 $(dirname "$0")/sel.py)
