@@ -1,15 +1,17 @@
 from pathlib import Path
 from typing import List
 import subprocess
+import sys
+
 
 def running() -> List[str]:
     b_sessions, errors = subprocess.Popen(
-            ['tmux', 'list-sessions'],
-            stderr=subprocess.PIPE,
-            stdout=subprocess.PIPE).communicate()
+        ['tmux', 'list-sessions'],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE).communicate()
 
     if errors:
-        print(errors.decode())
+        print(errors, file=sys.stderr)
         return []
 
     sessions = b_sessions.decode().strip().split('\n')
@@ -23,7 +25,8 @@ def static(tmuxp_path: Path) -> List[str]:
 
 
 def make_cmd(choice: str) -> str:
-    arg = ''
+    arg: str = ''
+    cmd: str = 'echo "Something went wrong"; exit 1'
     if choice.strip().endswith(' static'):
         arg = choice.strip().replace(' static', '')
         cmd = f'tmuxp load {arg}'
@@ -40,7 +43,7 @@ def combine(running: List[str], static: List[str]) -> List[str]:
         if s.replace(' static', '') not in r:
             running.append(s)
 
-    return running   
+    return running
 
 
 if __name__ == '__main__':
@@ -52,9 +55,9 @@ if __name__ == '__main__':
     sessions = '\n'.join(combined)
 
     fzf = subprocess.Popen(
-            ['fzf', '-1', '-0'],
-            stdout=subprocess.PIPE,
-            stdin=subprocess.PIPE,
-            shell=True)
+        ['fzf', '-1', '-0'],
+        stdout=subprocess.PIPE,
+        stdin=subprocess.PIPE,
+        shell=True)
     choice, _ = fzf.communicate(sessions.encode())
     print(make_cmd(choice.decode()))
