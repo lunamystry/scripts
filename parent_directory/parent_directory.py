@@ -5,7 +5,7 @@ Script to download files from the... uhm... somewhere
 author: Mandla Mbuli <mandla.mbuli@live.co.za>
 
 creation date: 11 May 2018
-python 3.6
+python 3.7
 
 non-standard dependencies: lxml, aiohttp, aiofiles
 """
@@ -39,7 +39,7 @@ def file_links(inputs, ns=ns):
     url = inputs.download_from
     reg = inputs.has
 
-    logging.info(f'getting the links from: {url}')
+    logging.info(f'getting the links from: {urllib.parse.unquote(url)}')
     # fetch the page
     res = urllib.request.urlopen(url)
 
