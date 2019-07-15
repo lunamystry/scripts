@@ -1,6 +1,7 @@
 ### https://raw.github.com/github/gitignore/bab15e82cb861b39216d0ab7ec0b3950bd73313e/Haskell.gitignore
 
 dist
+dist-newstyle
 cabal-dev
 *.o
 *.hi
