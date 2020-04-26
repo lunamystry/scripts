@@ -1,0 +1,13 @@
+#! /usr/bin/env bash
+
+echo $1
+
+SAVEIFS=$IFS
+IFS=$(echo -en "\n\b")
+for f in $1/*
+do
+  new_name=`echo $(basename $f) | sed 's/ /_/g' | sed 's/update//g'`
+  mv -v $f "$new_name"
+done
+IFS=$SAVEIFS
+
